@@ -6,100 +6,103 @@ Crawlers
 
 {% block content %}
 <h3>New Crawl</h3>
-	<br>
-	<form method="POST" action="." class="form-group">{% csrf_token %} <!-- esse token é para segurança em forms do tipo POST -->
-        
-        <div class="row rounded-top" style="background-color:black;color:grey;padding:20px;">
-            <div class="col md-6">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        {{ form.source_name | as_crispy_field}}
-                    </div>
-                </div>
-            </div>
-            <div class="col md-6">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        {{ form.base_url | as_crispy_field}}
-                    </div>
+<br>
+<form method="POST" action="." class="form-group">{% csrf_token %} <!-- esse token é para segurança em forms do tipo POST -->
+    
+    <div class="row rounded-top" style="background-color:black;color:grey;padding:20px;">
+        <div class="col md-6">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    {{ form.source_name | as_crispy_field}}
                 </div>
             </div>
         </div>
-        
-        
-        
-        
-        
-        
-        
-        <!-- Configurações iniciais -->
-        <!-- <div class="row rounded-top" style="background-color:black;color:grey;padding:20px;">
-            <div class="col md-6">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        {{ form.source_name | as_crispy_field}}
-                    </div>
-                    <div class="input-group-prepend">
-                        {{ form.source_name | as_crispy_field}}
-                    </div>
-                </div>
-            </div>
-            <div class="col md-6">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        {{ form.source_name | as_crispy_field}}
-                    </div>
-                    <div class="input-group-prepend">
-                        {{ form.source_name | as_crispy_field}}
-                    </div>
+        <div class="col md-6">
+            <div class="input-group mb-3">
+                <div id="aa" class="input-group-prepend">
+                    {{ form.base_url | as_crispy_field}}
                 </div>
             </div>
         </div>
-        
-        Configuração de Antiblock
-        <div class="row rounded-bottom" style="background-color:grey;color:white;padding:20px;">
-            <div class="col md-4">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        {{ form.source_name | as_crispy_field}}
-                    </div>
+    </div>
+    
+    
+    <!-- Configurações iniciais -->
+    <!-- <div class="row rounded-top" style="background-color:black;color:grey;padding:20px;">
+        <div class="col md-6">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    {{ form.source_name | as_crispy_field}}
+                </div>
+                <div class="input-group-prepend">
+                    {{ form.source_name | as_crispy_field}}
                 </div>
             </div>
-            <div class="col md-4">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        {{ form.source_name | as_crispy_field}}
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
-        <!-- Configurações de Captcha -->
-        <!-- <div class="row rounded-bottom" style="background-color:black;color:grey;padding:20px;">
-            <div class="col md-4">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        {{ form.source_name | as_crispy_field}}
-                    </div>
-                </div>
-            </div>
-        </div> -->
-        
-        <div class="row" style="background-color:white;color:white;padding:20px;">
-            <button type="submit" name="save" class="btn btn-success" style="display: block; margin: 0 auto;">Submit Request</button>
         </div>
-        <!-- <button onclick="myFunction()">Click Me</button>
-        
-        <iframe id="myIframe" style="display: none;" height="500px" width="100%" src="http://transparencia.mg.gov.br/estado-pessoal/viagens"></iframe> -->
+        <div class="col md-6">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    {{ form.source_name | as_crispy_field}}
+                </div>
+                <div class="input-group-prepend">
+                    {{ form.source_name | as_crispy_field}}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    Configuração de Antiblock
+    <div class="row rounded-bottom" style="background-color:grey;color:white;padding:20px;">
+        <div class="col md-4">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    {{ form.source_name | as_crispy_field}}
+                </div>
+            </div>
+        </div>
+        <div class="col md-4">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    {{ form.source_name | as_crispy_field}}
+                </div>
+            </div>
+        </div>
+    </div> -->
 
+    <!-- Configurações de Captcha -->
+    <!-- <div class="row rounded-bottom" style="background-color:black;color:grey;padding:20px;">
+        <div class="col md-4">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    {{ form.source_name | as_crispy_field}}
+                </div>
+            </div>
+        </div>
+    </div> -->
+    
+    <div class="row" style="background-color:white;color:white;padding:20px;">
+        <button type="submit" name="save" class="btn btn-success" style="display: block; margin: 0 auto;">Crawl</button>
+    </div>
 
-   </form>
-   <script>
-        function myFunction() {
-            var x = document.getElementById("myIframe");
-            if (x.style.display === "none") x.style.display = "block";
-            else x.style.display = "none";
-        }
+    <h2>Add Steps</h2>
+    <div id="stepDiv" class="input-group">
+        <select id="stepSelect" class="custom-select" onchange=enableAddStep()>
+            <option value="default" selected>Selecione um passo</option>
+            <option value="click">Clique no elemento </option>
+            <option value="select">Selecione opção </option>
+            <option value="table">Salve tabela </option>
+            <option value="save">Salve dados</option>
+            <option value="iframe">Mude para Iframe </option>
+            <option value="download">Baixe o arquivo</option>
+            <option value="pages">Para cada página </option>
+            <option value="captcha">Quebre o Captcha </option>
+            <option value="if">Se detectar elemento </option>
+        </select>
+        <div class="input-group-append">
+            <button type="button" class="btn btn-primary" id="addStep" onclick=addNewStep() disabled>Adicionar</button>
+        </div>
+    </div>
 
-   </script>
+</form>
+
 {% endblock %}

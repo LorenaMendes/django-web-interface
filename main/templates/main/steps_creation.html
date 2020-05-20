@@ -1,0 +1,33 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+Steps
+{% endblock %}
+
+{% block content %}
+<h3>New Crawl</h3>
+
+<div class="row" style="background-color:white;color:white;padding:20px;">
+    <button type="button" id="myButton" onclick="ShowIframe()" class="btn btn-success" style="display: block; margin: 0 auto;">Hide Website</button>
+</div>
+
+<iframe id="myIframe" style="display: block;" height="500px" width="100%" src="{{url}}"></iframe>
+
+
+<script>
+    function ShowIframe() {
+
+        var iframe_element = document.getElementById("myIframe");
+        
+        if (iframe_element.style.display === "none"){
+            iframe_element.style.display = "block";
+            document.getElementById("myButton").innerText = "Hide Website";
+        }
+        else{
+            iframe_element.style.display = "none";
+            document.getElementById("myButton").innerText = "Show Website";
+        }
+    }
+</script>
+
+{% endblock %}
