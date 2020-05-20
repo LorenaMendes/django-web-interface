@@ -40,3 +40,4 @@ class RawCrawlRequestForm(forms.Form):
     base_url = forms.CharField(label="Base URL", max_length=200,
         widget=forms.TextInput(attrs={'placeholder': 'www.example.com/data/'})
     )
+
