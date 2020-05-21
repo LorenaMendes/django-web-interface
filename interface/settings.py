@@ -125,3 +125,4 @@ STATICFILES_DIRS = (
     '/home/lorena/Django/interface/main/staticfiles',
 )
 STATIC_URL = '/static/'
+STATIC_ROOT = '/home/lorena/Django/interface/main'

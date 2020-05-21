@@ -16,7 +16,11 @@ def create_crawl(response):
         my_form = RawCrawlRequestForm(response.POST)
         if my_form.is_valid():
 
+            print('++++++++++++++++++++++++++++++++++')
             new_crawl = CrawlRequestForm(my_form.cleaned_data)
+            print('*****************************')
+            print(my_form.cleaned_data['captcha'])
+            print('*****************************')
             new_crawl.save()
             context['url'] = my_form.cleaned_data['base_url']
             
@@ -29,4 +33,5 @@ def create_crawl(response):
     return render(response, "main/create_crawl.html", context)
 
 def create_steps(response):
+    
     return render(response, "main/steps_creation.html", {})
