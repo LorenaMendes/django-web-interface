@@ -31,7 +31,7 @@ class CrawlRequestForm(forms.ModelForm):
         fields = [
             'source_name',
             'base_url',
-            # 'antiblock',
+            'antiblock',
             'captcha',
         ]
 
@@ -42,14 +42,13 @@ class RawCrawlRequestForm(forms.Form):
     base_url = forms.CharField(label="Base URL", max_length=200,
         widget=forms.TextInput(attrs={'placeholder': 'www.example.com/data/'})
     )
-    # antiblock = forms.ChoiceField(choices = (
-    #     ('1', 'None'),
-    #     ('2', 'IP rotation'),
-    #     ('3', 'User-agent rotation'),
-    #     ('4', 'Random delays'),
-    #     ('5', 'Use proxy'),
-    #     ('6', 'Use cookies'),
-    # ))
+    antiblock = forms.ChoiceField(choices = (
+        ('none', 'None'),
+        ('ip', 'IP rotation'),
+        ('user_agent', 'User-agent rotation'),
+        ('delay', 'Delays'),
+        ('cookies', 'Use cookies'),
+    ))
     captcha = forms.ChoiceField(choices = (
         ('1', 'None'), 
         ('2', 'Image'),
