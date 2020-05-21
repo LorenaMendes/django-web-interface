@@ -9,7 +9,7 @@ Crawlers
 <br>
 <form method="POST" action="." class="form-group">{% csrf_token %} <!-- esse token é para segurança em forms do tipo POST -->
     
-    <div class="row rounded-top" style="background-color:black;color:grey;padding:20px;">
+    <div class="row rounded-top" style="background-color:grey;color:black;padding:20px;">
         <div class="col md-6">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -53,7 +53,7 @@ Crawlers
 
 
 <!-- Configuração de Antiblock -->
-    <div class="row rounded-bottom" style="background-color:grey;color:white;padding:20px;">
+    <div class="row rounded-bottom" style="background-color:#cdd4da;color:black;padding:20px;">
         <div class="col md-4">
             <div class="">
                 <label for="id_source_name" class=" requiredField">
@@ -66,13 +66,10 @@ Crawlers
                         <option value="user_agent">User-agent rotation</option>
                         <option value="delay">Delay</option>
                         <option value="cookies">Cookies</option>
-                    </select>
-                    <!-- <div id="ir_rotation">
-                        <select class="custom-select" id="ip_rotation_type">
-                            <option value="tor" selected>Tor</option>
-                            <option value="proxy">Proxy list</option>
-                        </select>
-                    </div> -->
+                    </select><br /><br/>
+                    <div id="antiblockDiv"></div>
+                
+                
                 </div>
             </div>
         </div>
@@ -85,19 +82,8 @@ Crawlers
         </div>
     </div>
 
-    <!-- Configurações de Captcha -->
-    <!-- <div class="row rounded-bottom" style="background-color:black;color:grey;padding:20px;">
-        <div class="col md-4">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    {{ form.source_name | as_crispy_field}}
-                </div>
-            </div>
-        </div>
-    </div> -->
-    
     <div class="row" style="background-color:white;color:white;padding:20px;">
-        <button type="submit" name="save" class="btn btn-success" style="display: block; margin: 0 auto;" onclick="showIframe">Crawl</button>
+        <button type="submit" name="save" class="btn btn-success" style="display: block; margin: 0 auto;" onclick="showIframe">Next</button>
     </div>
     
         <!-- end steps -->

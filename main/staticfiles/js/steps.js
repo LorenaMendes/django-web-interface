@@ -12,10 +12,110 @@ function ShowIframe() {
     }
 }
 
+function detailIpRotationType(){
+    var ipSelect = document.getElementById("ip_rotation_menu");
+    const ip_rotation_type = ipSelect.options[ipSelect.selectedIndex].value;
+    var extra_div = document.getElementById("ip_type_div");
+
+    if(ip_rotation_type == 'tor'){
+        extra_div.innerHTML = `
+        <br>
+        <label for="tor_password" class=" requiredField">
+            Tor Password<span class="asteriskField">*</span>
+        </label><br />
+        <input class="form-control" id="tor_password" type="text" />
+        `
+    } else {
+        extra_div.innerHTML = `
+        <br>
+        <div class="input-group">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="inputGroupFile01">
+                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+            </div>
+        </div>
+        `
+    }
+}
+
 function detailAntiblock(){
-    var select = document.getElementById("antiblockMenu");
-    const antiblock_type = select.options[select.selectedIndex].value;
+    var mainSelect = document.getElementById("antiblockMenu");
+    const antiblock_type = mainSelect.options[mainSelect.selectedIndex].value;
+    var antiblockDiv = document.getElementById("antiblockDiv");
     
+    
+    if(antiblock_type == "default") antiblockDiv.innerHTML = ``
+    if(antiblock_type == "ip"){
+        antiblockDiv.innerHTML = `
+        <div id="ir_rotation">
+            <label for="id_source_name" class=" requiredField">
+                IP Rotation Type<span class="asteriskField">*</span>
+            </label><br />
+            <select class="custom-select" id="ip_rotation_menu" onchange=detailIpRotationType()>
+                <option value="tor" selected>Tor</option>
+                <option value="proxy">Proxy list</option>
+            </select>
+            <div id="ip_type_div"></div>
+            <label for="max_req_per_sec" class=" requiredField">
+                Max requisitions per IP<span class="asteriskField">*</span>
+            </label><br />
+            <input class="form-control" id="max_req_per_sec" type="number" />
+            <label for="max_reuse_rounds" class=" requiredField">
+                Max reuse rounds<span class="asteriskField">*</span>
+            </label><br />
+            <input class="form-control" id="max_reuse_rounds" type="number" />
+        </div>
+        `;
+        detailIpRotationType();
+    } else if (antiblock_type == "user_agent"){
+        
+        antiblockDiv.innerHTML = `
+        <div id="user_agent">
+            <label for="reqs_per_user_agent" class=" requiredField">
+                Requests per User Agent<span class="asteriskField">*</span>
+            </label><br />
+            <input class="form-control" id="reqs_per_user_agent" type="number" />
+            <label for="user_agents_list" class=" requiredField">
+                User Agents List<span class="asteriskField">*</span>
+            </label><br />
+            <input class="form-control" id="user_agents_list" type="text" />
+        </div>
+        `;
+    } else if(antiblock_type == "delay"){
+        
+        antiblockDiv.innerHTML = `
+        <div id="delay">
+            <label for="delay_secs" class=" requiredField">
+                Delay in seconds<span class="asteriskField">*</span>
+            </label><br />
+            <input class="form-control" id="delay_secs" type="number" />
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="random_delay" value="option1" checked>
+                <label class="form-check-label" for="random_delay">Random delay</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="exampleRadios" id="fixed_delay" value="option2">
+                <label class="form-check-label" for="fixed_delay">Fixed delay</label>
+            </div>
+        </div>
+        `;
+    } else if(antiblock_type == "cookies"){
+        
+        antiblockDiv.innerHTML = `
+        <div id="cookies">
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile01">
+                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                </div>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="persist_cookies">
+                <label class="custom-control-label" for="persist_cookies">Persist Cookies</label>
+            </div>
+        </div>
+        `;
+    }
 }
 
 function enableAddStep(){
