@@ -80,7 +80,6 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"dedent${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                            \{\% load static \%\}
                             <img src=\"\{\% static \'icons\/arrow-left-black.svg\' \%\}\" alt=\"Selecionar\"></img>
                         </span>
                     </div>
