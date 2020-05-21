@@ -12,6 +12,12 @@ function ShowIframe() {
     }
 }
 
+function detailAntiblock(){
+    var select = document.getElementById("antiblockMenu");
+    const antiblock_type = select.options[select.selectedIndex].value;
+    
+}
+
 function enableAddStep(){
     var select = document.getElementById("stepMenu");
     var btn = document.getElementById("addStep");
@@ -80,7 +86,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"dedent${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                            <img src=\"\{\% static \'icons\/arrow-left-black.svg\' \%\}\" alt=\"Selecionar\"></img>
+                            <img src="../static/icons/arrow-left-black.svg" alt=\"ArrowLeft\"></img>
                         </span>
                     </div>
                     <div class=\"col-1\">
@@ -88,7 +94,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"indent${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                        <img src=\"\{\% static \'icons\/arrow-right-black.svg\'\ \%}\" alt=\"Selecionar\"></img>
+                        <img src="../static/icons/arrow-right-black.svg" alt=\"ArrowRight\"></img>
                         </span>
                     </div>
                     <div class=\"col-1\">
@@ -96,7 +102,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"moveStepUp${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                        <img src=\"\{\% static \'icons\/arrow-up-black.svg\'\ \%}\" alt=\"Selecionar\"></img>
+                        <img src="../static/icons/arrow-up-black.svg" alt=\"ArrowUp\"></img>
                         </span>
                     </div>
                     <div class=\"col-1\">
@@ -104,7 +110,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"moveStepDown${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                        <img src=\"\{\% static \'icons\/arrow-down-black.svg\'\ \%}\" alt=\"Selecionar\"></img>
+                        <img src="../static/icons/arrow-down-black.svg" alt=\"ArrowDown\"></img>
                         </span>
                     </div>
                     <div class=\"col-1\">
@@ -112,7 +118,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"deleteElement${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                        <img src=\"\{\% static \'icons\/x.svg\'\ \%}\" alt=\"Selecionar\"></img>
+                        <img src="../static/icons/x.svg" alt=\"Delete\"></img>
                         </span>
                     </div>
                 </div>
@@ -222,19 +228,19 @@ function getSelectStepHtml(new_id){
             </div>
             <div class=\"row\" id=\"${filled_after_step}\" style=\"display: none;\">
                 <label class=\"col-4\">
-                    <img src=\"\{\% static \'icons\/corner-down-right.svg\'\ \%}\" alt=\"\"> Preenchido depois do passo:
+                    <img src=\"..\/icons\/corner-down-right.svg\" alt=\"\"> Preenchido depois do passo:
                 </label>
                 <input type=\"text\" class=\"col-4\" placeholder=\"Step-...-\" id=\"${new_id}FilledAfterStep\">
             </div>
             <div class=\"row\">
                 <label class=\"col-3\">
-                    <img src=\"\{\% static \'icons\/corner-down-right.svg\'\ \%}\" alt=\"\">
+                    <img src="../static/icons/corner-down-right-black.svg" alt=\"\">
                     Ignorar opções:
                 </label>
                 <input type=\"text\" class=\"col\" placeholder=\"cidade 1;cidade 2;(...)\" id=\"${options_to_ignore}\">
                 <div class="col-1">
                     <span class=\"badge badge-light clickableSpan\">
-                        <img src=\"\{\% static \'icons\/help-circle.svg\'\ \%}\" alt=\"Como usar\">
+                        <img src="../static/icons/help-circle.svg" alt=\"Como usar\">
                     </span>
                 </div>
             </div>
@@ -575,29 +581,24 @@ function getXpathHtml(xpath_id="", new_id="", label=""){
             <div class=\"col\"><label>${label}:</label></div>
         </div>
         <form>
-            <div class=\"form-row\">
-                <div class=\"col-1\">
-                    <span
-                        class=\"badge badge-light clickableSpan\"
-                        id=\"${xpath_id}SelectSpan\"
-                    >
-                        <img src=\"\{\% static \'icons\/mouse-pointer-gray.svg\'\ \%}\" alt=\"Selecionar\" 
+            <div class=\"input-group\">
+                <div>
+                    <span class=\"badge badge-light clickableSpan\" id=\"${xpath_id}SelectSpan\">
+                        <img src=\"../static/icons/mouse-pointer-gray.svg\" alt=\"Selecionar\" 
                             style=\"display: block; padding: 5px; margin: 0px auto;\"
                             id=\"${xpath_id}SelectSpanDefault\">
-                        <img src=\"\{\% static \'icons\/mouse-pointer-white.svg\'\ \%}\" alt=\"Selecionar\" 
+                        <img src=\"../static/icons/mouse-pointer-white.svg\" alt=\"Selecionar\" 
                             style=\"display: none; padding: 5px; margin: 0px auto;\" 
                             id=\"${xpath_id}SelectSpanSelected\">
                     </span>
                 </div>
-                <div class=\"col-6\">
-                    <input type=\"text\" class=\"form-control\" placeholder=\"xpath para elemento\" id=\"${xpath_id}\">
+                <input type=\"text\" class=\"form-control\" placeholder=\"xpath para elemento\" id=\"${xpath_id}\">
+                <div class=\"\">
+                    <button class=\"btn btn-primary\" type=\"button\" id=\"${xpath_id}CopySpan\">Copiar</button>
                 </div>
-                <div class=\"col-1\">
-                    <button class="btn btn-primary" type="button" id=\"${xpath_id}CopySpan\">Copiar</button>
-                </div>
-                <div class=\"col-1\">
-                    <span class=\"badge badge-light clickableSpan\">
-                        <img src=\"\{\% static \'icons\/help-circle.svg\'\ \%}\" alt=\"Como usar\">
+                <div class=\"input-group-prepend\">
+                    <span class=\"btn btn-light clickableSpan\">
+                        <img src=\"../static/icons/help-circle.svg\" alt=\"Como usar\">
                     </span>
                 </div>
             </div>
