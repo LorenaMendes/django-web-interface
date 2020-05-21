@@ -80,7 +80,8 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"dedent${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                            <img src=\"{% static \"icons/arrow-left-black.svg\" %}\" alt=\"Selecionar\"></img>
+                            \{\% load static \%\}
+                            <img src=\"\{\% static \'icons\/arrow-left-black.svg\' \%\}\" alt=\"Selecionar\"></img>
                         </span>
                     </div>
                     <div class=\"col-1\">
@@ -88,7 +89,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"indent${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                        <img src=\"{% static \"icons/arrow-right-black.svg\" %}\" alt=\"Selecionar\"></img>
+                        <img src=\"\{\% static \'icons\/arrow-right-black.svg\'\ \%}\" alt=\"Selecionar\"></img>
                         </span>
                     </div>
                     <div class=\"col-1\">
@@ -96,7 +97,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"moveStepUp${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                        <img src=\"{% static \"icons/arrow-up-black.svg\" %}\" alt=\"Selecionar\"></img>
+                        <img src=\"\{\% static \'icons\/arrow-up-black.svg\'\ \%}\" alt=\"Selecionar\"></img>
                         </span>
                     </div>
                     <div class=\"col-1\">
@@ -104,7 +105,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"moveStepDown${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                        <img src=\"/home/lorena/Django/interface/main/staticfiles/icons/arrow-down-black.svg\" alt=\"Selecionar\"></img>
+                        <img src=\"\{\% static \'icons\/arrow-down-black.svg\'\ \%}\" alt=\"Selecionar\"></img>
                         </span>
                     </div>
                     <div class=\"col-1\">
@@ -112,7 +113,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"deleteElement${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                        <img src=\"{% static \"x.svg\" %}\" alt=\"Selecionar\"></img>
+                        <img src=\"\{\% static \'icons\/x.svg\'\ \%}\" alt=\"Selecionar\"></img>
                         </span>
                     </div>
                 </div>
@@ -222,19 +223,19 @@ function getSelectStepHtml(new_id){
             </div>
             <div class=\"row\" id=\"${filled_after_step}\" style=\"display: none;\">
                 <label class=\"col-4\">
-                    <img src=\"icons/corner-down-right.svg\" alt=\"\"> Preenchido depois do passo:
+                    <img src=\"\{\% static \'icons\/corner-down-right.svg\'\ \%}\" alt=\"\"> Preenchido depois do passo:
                 </label>
                 <input type=\"text\" class=\"col-4\" placeholder=\"Step-...-\" id=\"${new_id}FilledAfterStep\">
             </div>
             <div class=\"row\">
                 <label class=\"col-3\">
-                    <img src=\"icons/corner-down-right.svg\" alt=\"\">
+                    <img src=\"\{\% static \'icons\/corner-down-right.svg\'\ \%}\" alt=\"\">
                     Ignorar opções:
                 </label>
                 <input type=\"text\" class=\"col\" placeholder=\"cidade 1;cidade 2;(...)\" id=\"${options_to_ignore}\">
                 <div class="col-1">
                     <span class=\"badge badge-light clickableSpan\">
-                        <img src=\"icons/help-circle.svg\" alt=\"Como usar\">
+                        <img src=\"\{\% static \'icons\/help-circle.svg\'\ \%}\" alt=\"Como usar\">
                     </span>
                 </div>
             </div>
@@ -581,10 +582,10 @@ function getXpathHtml(xpath_id="", new_id="", label=""){
                         class=\"badge badge-light clickableSpan\"
                         id=\"${xpath_id}SelectSpan\"
                     >
-                        <img src=\"{static \'icons/mouse-pointer-gray.svg\'}\" alt=\"Selecionar\" 
+                        <img src=\"\{\% static \'icons\/mouse-pointer-gray.svg\'\ \%}\" alt=\"Selecionar\" 
                             style=\"display: block; padding: 5px; margin: 0px auto;\"
                             id=\"${xpath_id}SelectSpanDefault\">
-                        <img src=\"icons/mouse-pointer-white.svg\" alt=\"Selecionar\" 
+                        <img src=\"\{\% static \'icons\/mouse-pointer-white.svg\'\ \%}\" alt=\"Selecionar\" 
                             style=\"display: none; padding: 5px; margin: 0px auto;\" 
                             id=\"${xpath_id}SelectSpanSelected\">
                     </span>
@@ -597,7 +598,7 @@ function getXpathHtml(xpath_id="", new_id="", label=""){
                 </div>
                 <div class=\"col-1\">
                     <span class=\"badge badge-light clickableSpan\">
-                        <img src=\"icons/help-circle.svg\" alt=\"Como usar\">
+                        <img src=\"\{\% static \'icons\/help-circle.svg\'\ \%}\" alt=\"Como usar\">
                     </span>
                 </div>
             </div>
@@ -657,4 +658,153 @@ function copyInputText(){
     const el = document.getElementById("configJson");
     el.select();
     document.execCommand('copy');
+}
+
+function getIndentationLevel(step_id) {
+    var el = document.querySelector("#" + step_id + " > div.col-1.indentContainer");
+    console.log(":::getIndentationLevel #" + step_id + " > div.col-1.indentContainer");
+    var depth = el.children.length + 1;
+    // if (el.children.lenght) depth = el.children.length + 1;
+    // else depth = 1;
+    console.log("Indentation:", depth);
+    return depth;
+}
+
+function getStepConfig(step_container_id){
+    var step_container = document.getElementById(step_container_id);
+
+    var id_parts = step_container_id.split("-");
+    
+    console.log(step_container.getAttribute("steptype"));
+    
+    var step_type = step_container.getAttribute("steptype");
+    
+    var config = {}
+
+    var step_id = [id_parts[0], id_parts[1], ""].join("-");
+
+    if (step_type == "click") {
+        config = getClickStepConfig(step_id);
+    } else if (step_type == "select") {
+        config = getSelectStepConfig(step_id);
+    } else if (step_type == "table") {
+        config = getSaveTableConfig(step_id);
+    } else if (step_type == "save") {
+        config = getSaveInfoConfig(step_id);
+    } else if (step_type == "iframe") {
+        config = getIFrameStepConfig(step_id);
+    } else if (step_type == "download") {
+        config = getDownloadConfig(step_id);
+    } else if (step_type == "pages") {
+        config = getPaginationConfig(step_id);
+    } else if (step_type == "captcha") {
+        config = getCaptchaConfig(step_id);
+    } else if (step_type == "if") {
+        config = getIfConfig(step_id);
+    } else {
+        console.log("Invalid option of step. Returning.");
+        return;
+    }
+
+    config["type"] = step_type;
+    return config;
+}
+
+function getClickStepConfig(step_id) {
+    var config = {};
+    var xpath_input = document.querySelector(`#${step_id}XpathInput`);
+
+    console.log(`#${step_id}XpathInput`);
+
+    config["element_to_click_xpath"] = xpath_input.value;
+    return config;
+}
+
+function getSelectStepConfig(step_id) {
+    var config = {};
+
+    config["select_xpath"] = document.querySelector(`#${step_id}XpathInput`).value;
+    config["filled_dynamically"] = document.querySelector(`#${step_id}IsFilledDynamically`).checked;
+
+    
+    config["ignore_options"] = document.querySelector(`#${step_id}OptionToIgnore`).value.split(";");
+
+    if (config["filled_dynamically"])
+        config["filled_after_step"] = document.querySelector(`#${step_id}FilledAfterStep`).value;
+    else
+        config["filled_after_step"] = "";
+
+    return config;
+}
+
+function getSaveTableConfig(step_id) {
+    var config = {};
+
+    config["table_xpath"] = document.querySelector(`#${step_id}XpathInput`).value;
+    config["save_to_file"] = document.querySelector(`#${step_id}FileName`).value;
+    config["append_to_file"] = document.querySelector(`#${step_id}AppendToFile`).checked;
+
+    return config;
+}
+
+function getSaveInfoConfig(step_id) {
+    var config = {};
+
+    config["save_to_file"] = document.getElementById(`${step_id}FileName`).value;
+    config["appent_to_file"] = document.getElementById(`${step_id}AppendToFile`).checked;
+    
+    var infos = document.getElementById(`${step_id}InfoContainer`).children;
+    config["info"] = []
+    for (var info of infos) {
+        var info_id = info.getAttribute("id");
+        if(info_id == `${step_id}Dummy`)
+            continue;
+        var type = info.getAttribute("type");
+        var xpath_to_element = document.getElementById(`${info_id}-XpathInput`).value;
+
+        config["info"] = config["info"].concat([{
+            "type": type, "xpath": xpath_to_element
+        }]);
+    }
+
+    return config;
+}
+
+function getIFrameStepConfig(step_id) {
+    var config = {};
+    config["iframe_xpath"] = document.querySelector(`#${step_id}XpathInput`).value;
+    return config;
+}
+
+function getDownloadConfig(step_id) {
+    var config = {};
+
+    config["file_xpath"] = document.querySelector(`#${step_id}XpathInput`).value;
+    config["save_in_folder"] = document.querySelector(`#${step_id}FolderAddress`).value;
+
+    return config;
+}
+
+function getPaginationConfig(step_id) { 
+    var config = {};
+
+    config["next_btn_xpath"] = document.querySelector(
+        `#${step_id}NextPageBtn`).value;
+    config["max_pages_info_xpath"] = document.querySelector(
+        `#${step_id}MaxPagesInfo`).value;
+
+    return config;
+}
+
+function getCaptchaConfig(step_id) {
+    var config = {};
+    config["captcha_xpath"] = document.querySelector(`#${step_id}XpathInput`).value;
+    return config;
+}
+
+function getIfConfig(step_id) {
+    var config = {};
+    config["element_xpath"] = document.querySelector(`#${step_id}XpathInput`).value;
+    config["if_detect"] = document.querySelector(`#${step_id}IfDetect`).value;
+    return config;
 }
