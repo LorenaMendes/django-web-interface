@@ -49,25 +49,41 @@ Crawlers
                 </div>
             </div>
         </div>
-    </div>
-    
-    Configuração de Antiblock
+    </div> -->
+
+
+<!-- Configuração de Antiblock -->
     <div class="row rounded-bottom" style="background-color:grey;color:white;padding:20px;">
         <div class="col md-4">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    {{ form.source_name | as_crispy_field}}
+            <div class="">
+                <label for="id_source_name" class=" requiredField">
+                    Antiblock<span class="asteriskField">*</span>
+                </label><br />
+                <div class="">
+                    <select class="custom-select" id="antiblockMenu" onchange=detailAntiblock()>
+                        <option value="default" selected>None</option>
+                        <option value="ip">IP rotation</option>
+                        <option value="user_agent">User-agent rotation</option>
+                        <option value="delay">Delay</option>
+                        <option value="cookies">Cookies</option>
+                    </select>
+                    <!-- <div id="ir_rotation">
+                        <select class="custom-select" id="ip_rotation_type">
+                            <option value="tor" selected>Tor</option>
+                            <option value="proxy">Proxy list</option>
+                        </select>
+                    </div> -->
                 </div>
             </div>
         </div>
         <div class="col md-4">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                    {{ form.source_name | as_crispy_field}}
+                    {{ form.captcha | as_crispy_field}}
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- Configurações de Captcha -->
     <!-- <div class="row rounded-bottom" style="background-color:black;color:grey;padding:20px;">
@@ -84,13 +100,9 @@ Crawlers
         <button type="submit" name="save" class="btn btn-success" style="display: block; margin: 0 auto;" onclick="showIframe">Crawl</button>
     </div>
     
-    <div id="StepDiv" style="display: none;">   
-        
-        
-    </div>
         <!-- end steps -->
         
         
-    </form>
+</form>
     
     {% endblock %}
