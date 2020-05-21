@@ -13,14 +13,13 @@ def monitoring(response):
 def create_crawl(response):
     context = {}
     if response.method == "POST":
+        print('++++++++++++++++++++++++++++++++++')
+        print(response.POST)
+        print('++++++++++++++++++++++++++++++++++')
         my_form = RawCrawlRequestForm(response.POST)
         if my_form.is_valid():
-
-            print('++++++++++++++++++++++++++++++++++')
+            print (my_form.cleaned_data)
             new_crawl = CrawlRequestForm(my_form.cleaned_data)
-            print('*****************************')
-            print(my_form.cleaned_data['captcha'])
-            print('*****************************')
             new_crawl.save()
             context['url'] = my_form.cleaned_data['base_url']
             
