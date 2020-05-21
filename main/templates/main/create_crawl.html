@@ -25,34 +25,8 @@ Crawlers
             </div>
         </div>
     </div>
-    
-    
-    <!-- Configurações iniciais -->
-    <!-- <div class="row rounded-top" style="background-color:black;color:grey;padding:20px;">
-        <div class="col md-6">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    {{ form.source_name | as_crispy_field}}
-                </div>
-                <div class="input-group-prepend">
-                    {{ form.source_name | as_crispy_field}}
-                </div>
-            </div>
-        </div>
-        <div class="col md-6">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    {{ form.source_name | as_crispy_field}}
-                </div>
-                <div class="input-group-prepend">
-                    {{ form.source_name | as_crispy_field}}
-                </div>
-            </div>
-        </div>
-    </div> -->
 
 
-<!-- Configuração de Antiblock -->
     <div class="row rounded-bottom" style="background-color:#cdd4da;color:black;padding:20px;">
         <div class="col md-4">
             <div class="">
@@ -60,16 +34,14 @@ Crawlers
                     Antiblock<span class="asteriskField">*</span>
                 </label><br />
                 <div class="">
-                    <select class="custom-select" id="antiblockMenu" onchange=detailAntiblock()>
+                    <select name="antiblock" class="custom-select requiredField" id="antiblockMenu" onchange=detailAntiblock() >
                         <option value="default" selected>None</option>
                         <option value="ip">IP rotation</option>
                         <option value="user_agent">User-agent rotation</option>
                         <option value="delay">Delay</option>
                         <option value="cookies">Cookies</option>
-                    </select><br /><br/>
+                    </select>
                     <div id="antiblockDiv"></div>
-                
-                
                 </div>
             </div>
         </div>
@@ -85,9 +57,6 @@ Crawlers
     <div class="row" style="background-color:white;color:white;padding:20px;">
         <button type="submit" name="save" class="btn btn-success" style="display: block; margin: 0 auto;" onclick="showIframe">Next</button>
     </div>
-    
-        <!-- end steps -->
-        
         
 </form>
     
