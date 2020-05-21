@@ -81,28 +81,16 @@ Crawlers
     </div> -->
     
     <div class="row" style="background-color:white;color:white;padding:20px;">
-        <button type="submit" name="save" class="btn btn-success" style="display: block; margin: 0 auto;">Crawl</button>
+        <button type="submit" name="save" class="btn btn-success" style="display: block; margin: 0 auto;" onclick="showIframe">Crawl</button>
     </div>
-
-    <h2>Add Steps</h2>
-    <div id="stepDiv" class="input-group">
-        <select id="stepSelect" class="custom-select" onchange=enableAddStep()>
-            <option value="default" selected>Selecione um passo</option>
-            <option value="click">Clique no elemento </option>
-            <option value="select">Selecione opção </option>
-            <option value="table">Salve tabela </option>
-            <option value="save">Salve dados</option>
-            <option value="iframe">Mude para Iframe </option>
-            <option value="download">Baixe o arquivo</option>
-            <option value="pages">Para cada página </option>
-            <option value="captcha">Quebre o Captcha </option>
-            <option value="if">Se detectar elemento </option>
-        </select>
-        <div class="input-group-append">
-            <button type="button" class="btn btn-primary" id="addStep" onclick=addNewStep() disabled>Adicionar</button>
-        </div>
+    
+    <div id="StepDiv" style="display: none;">   
+        
+        
     </div>
-
-</form>
-
-{% endblock %}
+        <!-- end steps -->
+        
+        
+    </form>
+    
+    {% endblock %}
