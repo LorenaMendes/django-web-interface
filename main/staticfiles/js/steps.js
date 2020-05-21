@@ -19,19 +19,20 @@ function detailIpRotationType(){
 
     if(ip_rotation_type == 'tor'){
         extra_div.innerHTML = `
-        <br>
-        <label for="tor_password" class=" requiredField">
+        <br /><label for="tor_password" class="requiredField">
             Tor Password<span class="asteriskField">*</span>
-        </label><br />
-        <input class="form-control" id="tor_password" type="text" />
+        </label>
+        <input class="form-control" name="tor_password" id="tor_password" type="text" />
         `
     } else {
         extra_div.innerHTML = `
-        <br>
+        <br /><label for="proxy_list" class="requiredField">
+            Proxy List File<span class="asteriskField">*</span>
+        </label>
         <div class="input-group">
             <div class="custom-file">
-                <input type="file" class="custom-file-input" id="inputGroupFile01">
-                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                <input name="proxy_list" type="file" class="custom-file-input" id="proxy_list">
+                <label class="custom-file-label" for="proxy_list">Choose file</label>
             </div>
         </div>
         `
@@ -48,22 +49,22 @@ function detailAntiblock(){
     if(antiblock_type == "ip"){
         antiblockDiv.innerHTML = `
         <div id="ir_rotation">
-            <label for="id_source_name" class=" requiredField">
+            <br /><label for="id_source_name" class="requiredField">
                 IP Rotation Type<span class="asteriskField">*</span>
-            </label><br />
-            <select class="custom-select" id="ip_rotation_menu" onchange=detailIpRotationType()>
+            </label>
+            <select class="custom-select" id="ip_rotation_menu" name="ip_rotation_menu" onchange=detailIpRotationType()>
                 <option value="tor" selected>Tor</option>
                 <option value="proxy">Proxy list</option>
             </select>
             <div id="ip_type_div"></div>
-            <label for="max_req_per_sec" class=" requiredField">
+            <br /><label for="max_req_per_ip" class="requiredField">
                 Max requisitions per IP<span class="asteriskField">*</span>
-            </label><br />
-            <input class="form-control" id="max_req_per_sec" type="number" />
-            <label for="max_reuse_rounds" class=" requiredField">
+            </label>
+            <input class="form-control" name="max_req_per_ip" id="max_req_per_ip" type="number" />
+            <br /><label for="max_reuse_rounds" class="requiredField">
                 Max reuse rounds<span class="asteriskField">*</span>
-            </label><br />
-            <input class="form-control" id="max_reuse_rounds" type="number" />
+            </label>
+            <input class="form-control" name="max_reuse_rounds" id="max_reuse_rounds" type="number" />
         </div>
         `;
         detailIpRotationType();
@@ -71,25 +72,28 @@ function detailAntiblock(){
         
         antiblockDiv.innerHTML = `
         <div id="user_agent">
-            <label for="reqs_per_user_agent" class=" requiredField">
+            <br /><label for="reqs_per_user_agent" class="requiredField">
                 Requests per User Agent<span class="asteriskField">*</span>
-            </label><br />
-            <input class="form-control" id="reqs_per_user_agent" type="number" />
-            <label for="user_agents_list" class=" requiredField">
-                User Agents List<span class="asteriskField">*</span>
-            </label><br />
-            <input class="form-control" id="user_agents_list" type="text" />
+            </label>
+            <input class="form-control" name="reqs_per_user_agent" id="reqs_per_user_agent" type="number" />
+            <br /><label for="user_agents_file" class="requiredField">
+                User Agents File<span class="asteriskField">*</span>
+            </label>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" name="user_agents_file" id="user_agents_file">
+                <label class="custom-file-label" for="user_agents_file">Choose file</label>
+            </div>
         </div>
         `;
     } else if(antiblock_type == "delay"){
         
         antiblockDiv.innerHTML = `
         <div id="delay">
-            <label for="delay_secs" class=" requiredField">
+            <br /><label for="delay_secs" class="requiredField">
                 Delay in seconds<span class="asteriskField">*</span>
-            </label><br />
-            <input class="form-control" id="delay_secs" type="number" />
-            <div class="form-check">
+            </label>
+            <input class="form-control" name="delay_in_secs" id="delay_secs" type="number" />
+            <br /><div class="form-check">
                 <input class="form-check-input" type="radio" name="exampleRadios" id="random_delay" value="option1" checked>
                 <label class="form-check-label" for="random_delay">Random delay</label>
             </div>
@@ -103,13 +107,16 @@ function detailAntiblock(){
         
         antiblockDiv.innerHTML = `
         <div id="cookies">
+            <br /><label for="cookies_file" class="requiredField">
+                Cookies File<span class="asteriskField">*</span>
+            </label>
             <div class="input-group">
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="inputGroupFile01">
-                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                    <input type="file" class="custom-file-input" id="cookies_file">
+                    <label class="custom-file-label" for="cookies_file">Choose file</label>
                 </div>
             </div>
-            <div class="custom-control custom-checkbox">
+            <br /><div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="persist_cookies">
                 <label class="custom-control-label" for="persist_cookies">Persist Cookies</label>
             </div>
