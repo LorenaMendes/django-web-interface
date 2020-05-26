@@ -12,8 +12,17 @@ function ShowIframe() {
     }
 }
 
+function enableNextButton(){
+    var field_element = document.getElementById("configJson");
+    var next_element = document.getElementById("submit_steps");
+    if (field_element != "")
+        next_element.disabled = false;
+    else
+        next_element.disabled = true;
+}
+
 function detailIpRotationType(){
-    var ipSelect = document.getElementById("ip_rotation_menu");
+    var ipSelect = document.getElementById("ip_type");
     const ip_rotation_type = ipSelect.options[ipSelect.selectedIndex].value;
     var extra_div = document.getElementById("ip_type_div");
 
@@ -22,7 +31,7 @@ function detailIpRotationType(){
         <br /><label for="tor_password" class="requiredField">
             Tor Password<span class="asteriskField">*</span>
         </label>
-        <input class="form-control" name="tor_password" id="tor_password" type="text" />
+        <input class="form-control" name="tor_password" id="tor_password" type="text" required/>
         `
     } else {
         extra_div.innerHTML = `
@@ -44,27 +53,26 @@ function detailAntiblock(){
     const antiblock_type = mainSelect.options[mainSelect.selectedIndex].value;
     var antiblockDiv = document.getElementById("antiblockDiv");
     
-    
-    if(antiblock_type == "default") antiblockDiv.innerHTML = ``
+    if(antiblock_type == "none") antiblockDiv.innerHTML = ``
     if(antiblock_type == "ip"){
         antiblockDiv.innerHTML = `
         <div id="ir_rotation">
             <br /><label for="id_source_name" class="requiredField">
                 IP Rotation Type<span class="asteriskField">*</span>
             </label>
-            <select class="custom-select" id="ip_rotation_menu" name="ip_rotation_menu" onchange=detailIpRotationType()>
+            <select class="custom-select" id="ip_type" name="ip_type" onchange=detailIpRotationType()>
                 <option value="tor" selected>Tor</option>
                 <option value="proxy">Proxy list</option>
             </select>
             <div id="ip_type_div"></div>
-            <br /><label for="max_req_per_ip" class="requiredField">
+            <br /><label for="max_reqs_per_ip" class="requiredField">
                 Max requisitions per IP<span class="asteriskField">*</span>
             </label>
-            <input class="form-control" name="max_req_per_ip" id="max_req_per_ip" type="number" />
+            <input class="form-control" name="max_reqs_per_ip" id="max_reqs_per_ip" type="number" required/>
             <br /><label for="max_reuse_rounds" class="requiredField">
                 Max reuse rounds<span class="asteriskField">*</span>
             </label>
-            <input class="form-control" name="max_reuse_rounds" id="max_reuse_rounds" type="number" />
+            <input class="form-control" name="max_reuse_rounds" id="max_reuse_rounds" type="number" required/>
         </div>
         `;
         detailIpRotationType();
@@ -75,7 +83,7 @@ function detailAntiblock(){
             <br /><label for="reqs_per_user_agent" class="requiredField">
                 Requests per User Agent<span class="asteriskField">*</span>
             </label>
-            <input class="form-control" name="reqs_per_user_agent" id="reqs_per_user_agent" type="number" />
+            <input class="form-control" name="reqs_per_user_agent" id="reqs_per_user_agent" type="number" required/>
             <br /><label for="user_agents_file" class="requiredField">
                 User Agents File<span class="asteriskField">*</span>
             </label>
@@ -193,7 +201,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"dedent${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                            <img src="../static/icons/arrow-left-black.svg" alt=\"ArrowLeft\"></img>
+                            <img src="../staticfiles/icons/arrow-left-black.svg" alt=\"ArrowLeft\"></img>
                         </span>
                     </div>
                     <div class=\"col-1\">
@@ -201,7 +209,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"indent${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                        <img src="../static/icons/arrow-right-black.svg" alt=\"ArrowRight\"></img>
+                        <img src="../staticfiles/icons/arrow-right-black.svg" alt=\"ArrowRight\"></img>
                         </span>
                     </div>
                     <div class=\"col-1\">
@@ -209,7 +217,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"moveStepUp${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                        <img src="../static/icons/arrow-up-black.svg" alt=\"ArrowUp\"></img>
+                        <img src="../staticfiles/icons/arrow-up-black.svg" alt=\"ArrowUp\"></img>
                         </span>
                     </div>
                     <div class=\"col-1\">
@@ -217,7 +225,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"moveStepDown${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                        <img src="../static/icons/arrow-down-black.svg" alt=\"ArrowDown\"></img>
+                        <img src="../staticfiles/icons/arrow-down-black.svg" alt=\"ArrowDown\"></img>
                         </span>
                     </div>
                     <div class=\"col-1\">
@@ -225,7 +233,7 @@ function getStepContainerHtml(new_id, step_type){
                             id=\"deleteElement${new_container_id}\"
                             class=\"badge badge-light clickableSpan\"
                         >
-                        <img src="../static/icons/x.svg" alt=\"Delete\"></img>
+                        <img src="../staticfiles/icons/x.svg" alt=\"Delete\"></img>
                         </span>
                     </div>
                 </div>
@@ -341,13 +349,13 @@ function getSelectStepHtml(new_id){
             </div>
             <div class=\"row\">
                 <label class=\"col-3\">
-                    <img src="../static/icons/corner-down-right-black.svg" alt=\"\">
+                    <img src="../staticfiles/icons/corner-down-right-black.svg" alt=\"\">
                     Ignorar opções:
                 </label>
                 <input type=\"text\" class=\"col\" placeholder=\"cidade 1;cidade 2;(...)\" id=\"${options_to_ignore}\">
                 <div class="col-1">
                     <span class=\"badge badge-light clickableSpan\">
-                        <img src="../static/icons/help-circle.svg" alt=\"Como usar\">
+                        <img src="../staticfiles/icons/help-circle.svg" alt=\"Como usar\">
                     </span>
                 </div>
             </div>
@@ -691,10 +699,10 @@ function getXpathHtml(xpath_id="", new_id="", label=""){
             <div class=\"input-group\">
                 <div>
                     <span class=\"badge badge-light clickableSpan\" id=\"${xpath_id}SelectSpan\">
-                        <img src=\"../static/icons/mouse-pointer-gray.svg\" alt=\"Selecionar\" 
+                        <img src=\"../staticfiles/icons/mouse-pointer-gray.svg\" alt=\"Selecionar\" 
                             style=\"display: block; padding: 5px; margin: 0px auto;\"
                             id=\"${xpath_id}SelectSpanDefault\">
-                        <img src=\"../static/icons/mouse-pointer-white.svg\" alt=\"Selecionar\" 
+                        <img src=\"../staticfiles/icons/mouse-pointer-white.svg\" alt=\"Selecionar\" 
                             style=\"display: none; padding: 5px; margin: 0px auto;\" 
                             id=\"${xpath_id}SelectSpanSelected\">
                     </span>
@@ -705,7 +713,7 @@ function getXpathHtml(xpath_id="", new_id="", label=""){
                 </div>
                 <div class=\"input-group-prepend\">
                     <span class=\"btn btn-light clickableSpan\">
-                        <img src=\"../static/icons/help-circle.svg\" alt=\"Como usar\">
+                        <img src=\"../staticfiles/icons/help-circle.svg\" alt=\"Como usar\">
                     </span>
                 </div>
             </div>
@@ -716,7 +724,7 @@ function getXpathHtml(xpath_id="", new_id="", label=""){
     return [html, events]
 }
 
-function genJson() {
+function generateJson() {
     var steps_container = document.getElementById("stepsContainer");
     var steps = steps_container.children;
 
