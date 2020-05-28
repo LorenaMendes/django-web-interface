@@ -1,15 +1,6 @@
 from django import forms
 from .models import CrawlRequest
 
-# class CrawlerSetup(forms.Form):
-#     start_date = birth_date = forms.DateField(
-#         widget=forms.TextInput(attrs={'type': 'date'})
-#     )
-#     end_date = birth_date = forms.DateField(
-#         widget=forms.TextInput(attrs={'type': 'date'})
-#     )
-#     max_reqs_per_sec = forms.IntegerField(label='Max requisitions per sec', min_value=1, widget=forms.TextInput(attrs={'placeholder': '2'}))
-
 class CrawlRequestForm(forms.ModelForm):
     class Meta:
         model = CrawlRequest
@@ -27,6 +18,17 @@ class CrawlRequestForm(forms.ModelForm):
         
         # Options for Delay
         delay_secs = forms.IntegerField(required=False)
+        delay_type = forms.ChoiceField(required=False)
+        
+        # Options for Cookies
+        cookies_file = forms.FileField(required=False)
+        persist_cookies = forms.BooleanField(required=False)
+
+        # Options for Captcha
+        img_url = forms.CharField(required=False)
+        img_xpath = forms.CharField(required=False)
+        sound_url = forms.CharField(required=False)
+        sound_xpath = forms.CharField(required=False)
 
         fields = [
             'source_name',
@@ -41,6 +43,13 @@ class CrawlRequestForm(forms.ModelForm):
             'reqs_per_user_agent',
             'user_agents_file',
             'delay_secs',
+            'delay_type',
+            'cookies_file',
+            'persist_cookies',
+            'img_url',
+            'img_xpath',
+            'sound_url',
+            'sound_xpath',
         ]
 
 class RawCrawlRequestForm(forms.Form):
@@ -56,12 +65,12 @@ class RawCrawlRequestForm(forms.Form):
         ('user_agent', 'User-agent rotation'),
         ('delay', 'Delays'),
         ('cookies', 'Use cookies'),
-    ))
+    ), widget=forms.Select(attrs={'onchange': 'detailAntiblock();'}))
     captcha = forms.ChoiceField(choices = (
-        ('1', 'None'), 
-        ('2', 'Image'),
-        ('3', 'Sound'),
-    ))
+        ('none', 'None'), 
+        ('image', 'Image'),
+        ('sound', 'Sound'),
+    ), widget=forms.Select(attrs={'onchange': 'detailCaptcha();'}))
     
     # Options for IP rotation
     ip_type = forms.ChoiceField(required=False, choices = (
@@ -82,3 +91,25 @@ class RawCrawlRequestForm(forms.Form):
 
     # Options for Delay
     delay_secs = forms.IntegerField(required=False, label="Delay in Seconds")
+    delay_type = forms.ChoiceField(required=False, choices = (
+        ('random', 'Random'), 
+        ('fixed', 'Fixed'),
+    ))
+
+    # Options for Cookies
+    cookies_file = forms.FileField(required=False, label="Cookies File")
+    persist_cookies = forms.BooleanField(required=False, label="Persist Cookies")
+    
+    # Options for Captcha
+    img_url = forms.CharField(required=False, label="Image URL", max_length=100,
+        widget=forms.TextInput(attrs={'placeholder': 'Image URL'})
+    )
+    img_xpath = forms.CharField(required=False, label="Image Xpath", max_length=100,
+        widget=forms.TextInput(attrs={'placeholder': 'Image Xpath'})
+    )
+    sound_url = forms.CharField(required=False, label="Sound URL", max_length=100,
+        widget=forms.TextInput(attrs={'placeholder': 'Sound URL'})
+    )
+    sound_xpath = forms.CharField(required=False, label="Sound Xpath", max_length=100,
+        widget=forms.TextInput(attrs={'placeholder': 'Sound Xpath'})
+    )
