@@ -1,0 +1,53 @@
+.sidenav{
+    height: 100%;
+    width: 160px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #1d1d1d;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.sidenav a{
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #28bcff;
+    display: block;
+}
+
+.sidenav a:hover{
+    color: #f1f1f1;
+}
+
+option:hover{
+    background-color: yellow;
+}
+
+.main{
+    margin-left: 160px;
+    padding: 0px 10px;
+}
+
+h1{
+    text-align: center;
+}
+
+body{
+    background-color: white !important;
+}
+
+.btn-success {
+    color: #28bcff !important;
+    background-color: #1d1d1d !important;
+    border-color: #1d1d1d !important;
+}
+
+#fixedbutton {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 14%;
+}
