@@ -48,8 +48,35 @@ function detailIpRotationType(){
     }
 }
 
+function detailCaptcha(){
+    var mainSelect = document.getElementById("id_captcha");
+    const captcha_type = mainSelect.options[mainSelect.selectedIndex].value;
+    var captchaDiv = document.getElementById("captchaDiv");
+    
+    if(captcha_type == "none") captchaDiv.innerHTML = ``
+    else if(captcha_type == "image"){
+        captchaDiv.innerHTML = `
+        <div id="ir_image">
+            <br /><label for="img_url" class="requiredField">
+                Image URL or Xpath <span class="asteriskField">*</span>
+            </label>
+            <input class="form-control" name="img_url" id="img_url" type="text" required/>
+        </div>
+    `;
+    } else if(captcha_type == "sound"){
+        captchaDiv.innerHTML = `
+        <div id="ir_image">
+            <br /><label for="sound_url" class="requiredField">
+                Sound URL or Xpath <span class="asteriskField">*</span>
+            </label>
+            <input class="form-control" name="sound_url" id="sound_url" type="text" required/>
+        </div>
+    `;
+    }
+}
+
 function detailAntiblock(){
-    var mainSelect = document.getElementById("antiblockMenu");
+    var mainSelect = document.getElementById("id_antiblock");
     const antiblock_type = mainSelect.options[mainSelect.selectedIndex].value;
     var antiblockDiv = document.getElementById("antiblockDiv");
     
@@ -100,13 +127,13 @@ function detailAntiblock(){
             <br /><label for="delay_secs" class="requiredField">
                 Delay in seconds<span class="asteriskField">*</span>
             </label>
-            <input class="form-control" name="delay_in_secs" id="delay_secs" type="number" />
-            <br /><div class="form-check">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="random_delay" value="option1" checked>
+            <input class="form-control" name="delay_in_secs" id="delay_secs" type="number" required/>
+            <br /><div class="form-check form-text">
+                <input class="form-check-input" type="radio" name="delay_type" id="random_delay" value="random" checked>
                 <label class="form-check-label" for="random_delay">Random delay</label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="exampleRadios" id="fixed_delay" value="option2">
+                <input class="form-check-input" type="radio" name="delay_type" id="fixed_delay" value="fixed">
                 <label class="form-check-label" for="fixed_delay">Fixed delay</label>
             </div>
         </div>
@@ -120,12 +147,12 @@ function detailAntiblock(){
             </label>
             <div class="input-group">
                 <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="cookies_file">
+                    <input type="file" class="custom-file-input" id="cookies_file" name="cookies_file">
                     <label class="custom-file-label" for="cookies_file">Choose file</label>
                 </div>
             </div>
             <br /><div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="persist_cookies">
+                <input type="checkbox" class="custom-control-input" id="persist_cookies" name="persist_cookies">
                 <label class="custom-control-label" for="persist_cookies">Persist Cookies</label>
             </div>
         </div>
