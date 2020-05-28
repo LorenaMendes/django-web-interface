@@ -5,59 +5,30 @@ Crawlers
 {% endblock %}
 
 {% block content %}
-<h3>New Crawl</h3>
-<br>
+
 <form method="POST" action="." class="form-group">{% csrf_token %} <!-- esse token é para segurança em forms do tipo POST -->
     
-    <div class="row rounded-top" style="background-color:grey;color:black;padding:20px;">
+    <div class="row" style="padding:20px;">
         <div class="col md-6">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    {{ form.source_name | as_crispy_field}}
-                </div>
-            </div>
+            {{ form.source_name | as_crispy_field}}
         </div>
         <div class="col md-6">
-            <div class="input-group mb-3">
-                <div id="aa" class="input-group-prepend">
-                    {{ form.base_url | as_crispy_field}}
-                </div>
-            </div>
+            {{ form.base_url | as_crispy_field}}
+        </div>
+    </div>
+    
+    <div class="row" style="padding:20px;">
+        <div class="col md-6">
+            {{ form.antiblock | as_crispy_field}}
+            <div id="antiblockDiv"></div>
+        </div>
+        <div class="col md-6">
+            {{ form.captcha | as_crispy_field}}
+            <div id="captchaDiv"></div>
         </div>
     </div>
 
-
-    <div class="row rounded-bottom" style="background-color:#cdd4da;color:black;padding:20px;">
-        <div class="col md-4">
-            <div class="">
-                <label for="id_source_name" class=" requiredField">
-                    Antiblock<span class="asteriskField">*</span>
-                </label><br />
-                <div class="">
-                    <select name="antiblock" class="custom-select requiredField" id="antiblockMenu" onchange=detailAntiblock() >
-                        <option value="none" selected>None</option>
-                        <option value="ip">IP rotation</option>
-                        <option value="user_agent">User-agent rotation</option>
-                        <option value="delay">Delay</option>
-                        <option value="cookies">Cookies</option>
-                    </select>
-                    <div id="antiblockDiv"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col md-4">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    {{ form.captcha | as_crispy_field}}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row" style="background-color:white;color:white;padding:20px;">
-        <button type="submit" name="save" class="btn btn-success" style="display: block; margin: 0 auto;" onclick="showIframe">Next</button>
-    </div>
-        
+    <button id="fixedbutton" type="submit" name="save" class="btn btn-success" onclick="showIframe">Next</button> 
 </form>
     
     {% endblock %}
