@@ -14,11 +14,10 @@ def create_crawl(response):
     context = {}
     if response.method == "POST":
         my_form = RawCrawlRequestForm(response.POST)
-        print("FOI 1")
+        
         if my_form.is_valid():
-            print("FOI 2")
             print(response.POST)
-            
+
             new_crawl = CrawlRequestForm(my_form.cleaned_data)
             new_crawl.save()
 
