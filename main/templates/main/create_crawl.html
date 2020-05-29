@@ -7,28 +7,52 @@ Crawlers
 {% block content %}
 
 <form method="POST" action="." class="form-group">{% csrf_token %} <!-- esse token é para segurança em forms do tipo POST -->
-    
-    <div class="row" style="padding:20px;">
-        <div class="col md-6">
-            {{ form.source_name | as_crispy_field}}
-        </div>
-        <div class="col md-6">
-            {{ form.base_url | as_crispy_field}}
+
+
+    <button type="button" class="accordion">Crawler Setup</button>
+    <div class="panel">
+        <div class="row" style="padding:20px;">
+            <div class="col md-6">
+                {{ form.source_name | as_crispy_field}}
+            </div>
+            <div class="col md-6">
+                {{ form.base_url | as_crispy_field}}
+            </div>
         </div>
     </div>
     
-    <div class="row" style="padding:20px;">
-        <div class="col md-6">
-            {{ form.antiblock | as_crispy_field}}
-            <div id="antiblockDiv"></div>
-        </div>
-        <div class="col md-6">
-            {{ form.captcha | as_crispy_field}}
-            <div id="captchaDiv"></div>
+    <button type="button" class="accordion">Request</button>
+    <div class="panel">
+        <div class="row" style="padding:20px;">
+            <div class="col md-6">
+                {{ form.antiblock | as_crispy_field}}
+                <div id="antiblockDiv"></div>
+            </div>
+            <div class="col md-6">
+                {{ form.captcha | as_crispy_field}}
+                <div id="captchaDiv"></div>
+            </div>
         </div>
     </div>
 
     <button id="fixedbutton" type="submit" name="save" class="btn btn-success" onclick="showIframe">Next</button> 
 </form>
+
+<script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + 500 + "px";
+            } 
+        });
+    }
+</script>
     
     {% endblock %}
