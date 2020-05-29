@@ -21,32 +21,6 @@ function enableNextButton(){
         next_element.disabled = true;
 }
 
-function detailIpRotationType(){
-    var ipSelect = document.getElementById("ip_type");
-    const ip_rotation_type = ipSelect.options[ipSelect.selectedIndex].value;
-    var extra_div = document.getElementById("ip_type_div");
-
-    if(ip_rotation_type == 'tor'){
-        extra_div.innerHTML = `
-        <br /><label for="tor_password" class="requiredField">
-            Tor Password<span class="asteriskField">*</span>
-        </label>
-        <input class="form-control" name="tor_password" id="tor_password" type="text" required/>
-        `
-    } else {
-        extra_div.innerHTML = `
-        <br /><label for="proxy_list" class="requiredField">
-            Proxy List File<span class="asteriskField">*</span>
-        </label>
-        <div class="input-group">
-            <div class="custom-file">
-                <input name="proxy_list" type="file" class="custom-file-input" id="proxy_list">
-                <label class="custom-file-label" for="proxy_list">Choose file</label>
-            </div>
-        </div>
-        `
-    }
-}
 
 function detailCaptcha(){
     var mainSelect = document.getElementById("id_captcha");
@@ -65,13 +39,38 @@ function detailCaptcha(){
     `;
     } else if(captcha_type == "sound"){
         captchaDiv.innerHTML = `
-        <div id="ir_image">
-            <br /><label for="sound_url" class="requiredField">
-                Sound URL or Xpath <span class="asteriskField">*</span>
-            </label>
-            <input class="form-control" name="sound_url" id="sound_url" type="text" required/>
+            <div id="ir_image">
+                <br /><label for="sound_url" class="requiredField">
+                    Sound URL or Xpath <span class="asteriskField">*</span>
+                </label>
+                <input class="form-control" name="sound_url" id="sound_url" type="text" required/>
+            </div>
+        `;
+    }
+}
+
+function detailIpRotationType(){
+    var ipSelect = document.getElementById("ip_type");
+    const ip_rotation_type = ipSelect.options[ipSelect.selectedIndex].value;
+    var extra_div = document.getElementById("ip_type_div");
+
+    if(ip_rotation_type == 'tor'){
+        extra_div.innerHTML = `
+        <br /><label for="tor_password" class="requiredField">
+            Tor Password<span class="asteriskField">*</span>
+        </label>
+        <input class="form-control" name="tor_password" id="tor_password" type="text" required/>
+        `
+    } else {
+        extra_div.innerHTML = `
+        <br /><label for="proxy_list" class="requiredField">
+            Proxy List File<span class="asteriskField">*</span>
+        </label>
+        <div class="custom-file">
+            <input name="proxy_list" type="file" class="custom-file-input" id="proxy_list">
+            <label class="custom-file-label" for="proxy_list">Choose file</label>
         </div>
-    `;
+        `
     }
 }
 
