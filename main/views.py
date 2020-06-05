@@ -8,7 +8,8 @@ def home(response):
     return render(response, "main/home.html", {})
 
 def monitoring(response):
-    return render(response, "main/monitoring.html", {})
+    return HttpResponseRedirect("http://localhost:5000/")
+    # return render(response, "main/monitoring.html", {})
 
 def create_crawl(response):
     context = {}
@@ -16,16 +17,11 @@ def create_crawl(response):
         my_form = RawCrawlRequestForm(response.POST)
         
         if my_form.is_valid():
-            print(response.POST)
-
             new_crawl = CrawlRequestForm(my_form.cleaned_data)
             new_crawl.save()
 
-            objs = CrawlRequest.objects
-            my_obj = objs.filter(base_url = my_form.cleaned_data['base_url'])
             
             context['url'] = my_form.cleaned_data['base_url']
-            context['id'] = my_obj.last().id
             
             return render(response, "main/steps_creation.html", context)
     else:
