@@ -5,6 +5,7 @@ from django.db import models
 class CrawlRequest(models.Model):
     source_name = models.CharField(max_length=200)
     base_url  = models.CharField(max_length=200)
+    obey_robots = models.BooleanField(blank=True, null=True)
     ANTIBLOCK_TYPE = [
         ('none', 'None'),
         ('ip', 'IP rotation'),

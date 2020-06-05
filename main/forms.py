@@ -4,6 +4,8 @@ from .models import CrawlRequest
 class CrawlRequestForm(forms.ModelForm):
     class Meta:
         model = CrawlRequest
+        
+        obey_robots = forms.BooleanField(required=False)
 
         # Options for IP rotation
         ip_type = forms.ChoiceField(required=False)
@@ -33,6 +35,7 @@ class CrawlRequestForm(forms.ModelForm):
         fields = [
             'source_name',
             'base_url',
+            'obey_robots',
             'antiblock',
             'captcha',
             'ip_type',
@@ -59,6 +62,7 @@ class RawCrawlRequestForm(forms.Form):
     base_url = forms.CharField(label="Base URL", max_length=200,
         widget=forms.TextInput(attrs={'placeholder': 'www.example.com/data/'})
     )
+    obey_robots = forms.BooleanField(required=False, label="Obey robots.txt")
     antiblock = forms.ChoiceField(choices = (
         ('none', 'None'),
         ('ip', 'IP rotation'),
