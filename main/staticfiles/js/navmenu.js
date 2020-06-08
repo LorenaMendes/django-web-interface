@@ -1,5 +1,101 @@
-function showBlock(clicked_id){
+function defineIcon(section, isValid){
+    var sectionId = '#' + section + '-valid-icon';
+    if (isValid) {
+        $(sectionId).removeClass('fa-warning').addClass('fa-check');
+    } else {
+        $(sectionId).removeClass('fa-check').addClass('fa-warning');
+    }
+}
+
+function defineValid(section, subsection1 = '', subsection2 = ''){
+    switch(section){
+        case 'basic-info':
+            if( document.getElementById('id_source_name').value.length > 0 &&
+                document.getElementById('id_base_url').value.length > 0
+            ) defineIcon(section, true);
+            else defineIcon(section, false);
+            break;
+        case 'antiblock':
+            switch(subsection1){
+                case 'ip':
+                    if(! (document.getElementById('id_max_reqs_per_ip').value.length > 0 &&
+                    document.getElementById('id_max_reuse_rounds').value.length > 0)){
+                        defineIcon(section, false);
+                        return;
+                    }
+                    
+                    var bool = true;
+                    switch(subsection2){
+                        case 'tor':
+                            bool = document.getElementById('id_tor_password').value.length > 0 ? bool&true : bool&false;
+                            break;
+                        case 'proxy':
+                            bool = document.getElementById('id_proxy_list').files.length == 0 ? boo&true : bool&false;
+                            break;
+                    }
+                    defineIcon(section, bool);
+                    break;
+                case 'user_agent':
+                    if( document.getElementById('id_reqs_per_user_agent').value.length > 0
+                    && document.getElementById('id_user_agents_file').files.length > 0){
+                        defineIcon(section, true);
+                    }
+                    else defineIcon(section, false);
+                    break;
+                case 'delay':
+                    if( document.getElementById('id_delay_secs').value.length > 0)
+                        defineIcon(section, true);
+                    else defineIcon(section, false);
+                    break;
+                case 'cookies':
+                    if( document.getElementById('id_cookies_file').files.length > 0){
+                        defineIcon(section, true);
+                    }
+                    else  defineIcon(section, false);
+                    break;
+            }
+            break;
+    }
+
+}
+
+$(document).ready(function() {
     
+    $('input').on('blur keyup', function() {
+        var inputName = $(this).attr('name');
+        switch(inputName){
+            case 'source_name':
+            case 'base_url':
+                defineValid('basic-info');
+                break;
+            case 'tor_password':
+                defineValid('antiblock', 'ip', 'tor');
+                break;
+            case 'proxy_list':
+                defineValid('antiblock', 'ip', 'proxy');
+                break;
+            case 'max_reqs_per_ip':
+            case 'max_reuse_rounds':
+                defineValid('antiblock', 'ip');
+                break;
+            case 'reqs_per_user_agent':
+            case 'user_agents_file':
+                defineValid('antiblock', 'user_agent');
+                break;
+            case 'delay_secs':
+                defineValid('antiblock', 'delay');
+                break;
+            case 'cookies_file':
+                defineValid('antiblock', 'cookies');
+                break;
+
+        }
+
+    });
+});
+
+function showBlock(clicked_id){
+
     var blocks = document.getElementsByClassName('block');
     for (var i = 0; i < blocks.length; i++)
     blocks[i].setAttribute('hidden', true);
@@ -26,132 +122,33 @@ function detailCaptcha(){
     
     if(captcha_type == "none") captchaDiv.innerHTML = ``
     else if(captcha_type == "image"){
-        captchaDiv.innerHTML = `
-        <div id="ir_image">
-            <br /><label for="img_url" class="requiredField">
-                Image URL or Xpath <span class="asteriskField">*</span>
-            </label>
-            <input class="form-control" name="img_url" id="img_url" type="text" required/>
-        </div>
-    `;
+        
     } else if(captcha_type == "sound"){
-        captchaDiv.innerHTML = `
-            <div id="ir_image">
-                <br /><label for="sound_url" class="requiredField">
-                    Sound URL or Xpath <span class="asteriskField">*</span>
-                </label>
-                <input class="form-control" name="sound_url" id="sound_url" type="text" required/>
-            </div>
-        `;
+        
     }
 }
 
 function detailIpRotationType(){
-    var ipSelect = document.getElementById("ip_type");
+    var ipSelect = document.getElementById("id_ip_type");
+    
     const ip_rotation_type = ipSelect.options[ipSelect.selectedIndex].value;
-    var extra_div = document.getElementById("ip_type_div");
-
-    if(ip_rotation_type == 'tor'){
-        extra_div.innerHTML = `
-        <br /><label for="tor_password" class="requiredField">
-            Tor Password<span class="asteriskField">*</span>
-        </label>
-        <input class="form-control" name="tor_password" id="tor_password" type="text" required/>
-        `
-    } else {
-        extra_div.innerHTML = `
-        <br /><label for="proxy_list" class="requiredField">
-            Proxy List File<span class="asteriskField">*</span>
-        </label>
-        <div class="custom-file">
-            <input name="proxy_list" type="file" class="custom-file-input" id="proxy_list">
-            <label class="custom-file-label" for="proxy_list">Choose file</label>
-        </div>
-        `
-    }
+    
+    document.getElementById("tor_div").hidden = true;
+    document.getElementById("proxy_div").hidden = true;
+    
+    var id = ip_rotation_type + "_div";
+    document.getElementById(id).hidden = false;    
 }
 
 function detailAntiblock(){
     var mainSelect = document.getElementById("id_antiblock");
     const antiblock_type = mainSelect.options[mainSelect.selectedIndex].value;
-    var antiblockDiv = document.getElementById("antiblockDiv");
-    
-    if(antiblock_type == "none") antiblockDiv.innerHTML = ``
-    if(antiblock_type == "ip"){
-        antiblockDiv.innerHTML = `
-        <div id="ir_rotation">
-            <br /><label for="id_source_name" class="requiredField">
-                IP Rotation Type<span class="asteriskField">*</span>
-            </label>
-            <select class="custom-select" id="ip_type" name="ip_type" onchange=detailIpRotationType()>
-                <option value="tor" selected>Tor</option>
-                <option value="proxy">Proxy list</option>
-            </select>
-            <div id="ip_type_div"></div>
-            <br /><label for="max_reqs_per_ip" class="requiredField">
-                Max requisitions per IP<span class="asteriskField">*</span>
-            </label>
-            <input class="form-control" name="max_reqs_per_ip" id="max_reqs_per_ip" type="number" required/>
-            <br /><label for="max_reuse_rounds" class="requiredField">
-                Max reuse rounds<span class="asteriskField">*</span>
-            </label>
-            <input class="form-control" name="max_reuse_rounds" id="max_reuse_rounds" type="number" required/>
-        </div>
-        `;
-        detailIpRotationType();
-    } else if (antiblock_type == "user_agent"){
-        
-        antiblockDiv.innerHTML = `
-        <div id="user_agent">
-            <br /><label for="reqs_per_user_agent" class="requiredField">
-                Requests per User Agent<span class="asteriskField">*</span>
-            </label>
-            <input class="form-control" name="reqs_per_user_agent" id="reqs_per_user_agent" type="number" required/>
-            <br /><label for="user_agents_file" class="requiredField">
-                User Agents File<span class="asteriskField">*</span>
-            </label>
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" name="user_agents_file" id="user_agents_file">
-                <label class="custom-file-label" for="user_agents_file">Choose file</label>
-            </div>
-        </div>
-        `;
-    } else if(antiblock_type == "delay"){
-        
-        antiblockDiv.innerHTML = `
-        <div id="delay">
-            <br /><label for="delay_secs" class="requiredField">
-                Delay in seconds<span class="asteriskField">*</span>
-            </label>
-            <input class="form-control" name="delay_in_secs" id="delay_secs" type="number" required/>
-            <br /><div class="form-check form-text">
-                <input class="form-check-input" type="radio" name="delay_type" id="random_delay" value="random" checked>
-                <label class="form-check-label" for="random_delay">Random delay</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="delay_type" id="fixed_delay" value="fixed">
-                <label class="form-check-label" for="fixed_delay">Fixed delay</label>
-            </div>
-        </div>
-        `;
-    } else if(antiblock_type == "cookies"){
-        
-        antiblockDiv.innerHTML = `
-        <div id="cookies">
-            <br /><label for="cookies_file" class="requiredField">
-                Cookies File<span class="asteriskField">*</span>
-            </label>
-            <div class="input-group">
-                <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="cookies_file" name="cookies_file">
-                    <label class="custom-file-label" for="cookies_file">Choose file</label>
-                </div>
-            </div>
-            <br /><div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="persist_cookies" name="persist_cookies">
-                <label class="custom-control-label" for="persist_cookies">Persist Cookies</label>
-            </div>
-        </div>
-        `;
-    }
+
+    var contents = document.getElementsByClassName("content-div");
+    for (const i in contents)
+        contents[i].hidden = true;
+    document.getElementById(antiblock_type).hidden = false;
+
+    console.log("tipo: " + antiblock_type);
+    defineValid('antiblock', antiblock_type);
 }

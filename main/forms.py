@@ -80,7 +80,7 @@ class RawCrawlRequestForm(forms.Form):
     ip_type = forms.ChoiceField(required=False, choices = (
         ('tor', 'Tor'), 
         ('proxy', 'Proxy'),
-    ))
+    ), widget=forms.Select(attrs={'onchange': 'detailIpRotationType();'}))
     tor_password = forms.CharField(required=False, label="Tor Password", max_length=20,
         widget=forms.TextInput(attrs={'placeholder': 'Password'})
     )

@@ -81,3 +81,19 @@ body {
 .list-group-item{
     background-color: #333 !important;
 }
+
+.validation-icon{
+    padding-left: 30%;
+}
+
+.sidemenu-items{
+    padding-left: 0px !important;
+}
+
+.fa-warning{
+    color: yellow;
+}
+
+.fa-check{
+    color: #71ff3e;
+}
