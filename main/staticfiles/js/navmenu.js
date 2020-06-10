@@ -5,6 +5,7 @@ function defineIcon(section, isValid){
     } else {
         $(sectionId).removeClass('fa-check').addClass('fa-warning');
     }
+    enableCreateButton();
 }
 
 function defineValid(section, subsection1 = '', subsection2 = ''){
@@ -17,6 +18,9 @@ function defineValid(section, subsection1 = '', subsection2 = ''){
             break;
         case 'antiblock':
             switch(subsection1){
+                case 'none':
+                    defineIcon(section, true);
+                    break;
                 case 'ip':
                     if(! (document.getElementById('id_max_reqs_per_ip').value.length > 0 &&
                     document.getElementById('id_max_reuse_rounds').value.length > 0)){
@@ -26,18 +30,15 @@ function defineValid(section, subsection1 = '', subsection2 = ''){
                     
                     var bool = true;
                     switch(subsection2){
-                        case 'tor':
-                            bool = document.getElementById('id_tor_password').value.length > 0 ? bool&true : bool&false;
-                            break;
                         case 'proxy':
-                            bool = document.getElementById('id_proxy_list').files.length == 0 ? boo&true : bool&false;
+                            bool = document.getElementById('id_proxy_list').value.length == 0 ? boo&true : bool&false;
                             break;
                     }
                     defineIcon(section, bool);
                     break;
                 case 'user_agent':
                     if( document.getElementById('id_reqs_per_user_agent').value.length > 0
-                    && document.getElementById('id_user_agents_file').files.length > 0){
+                    && document.getElementById('id_user_agents_file').value.length > 0){
                         defineIcon(section, true);
                     }
                     else defineIcon(section, false);
@@ -48,10 +49,17 @@ function defineValid(section, subsection1 = '', subsection2 = ''){
                     else defineIcon(section, false);
                     break;
                 case 'cookies':
-                    if( document.getElementById('id_cookies_file').files.length > 0){
+                    if( document.getElementById('id_cookies_file').value.length > 0){
                         defineIcon(section, true);
                     }
                     else  defineIcon(section, false);
+                    break;
+            }
+            break;
+        case 'captcha':
+            switch(subsection1){
+                case '':
+                    defineIcon(section, true);
                     break;
             }
             break;
@@ -59,7 +67,42 @@ function defineValid(section, subsection1 = '', subsection2 = ''){
 
 }
 
-$(document).ready(function() {
+function enableCreateButton(){
+    var blocks = document.getElementsByClassName('valid-icon');
+    var isValid = true;
+    for(var i=0; i< blocks.length; i++){
+        if(blocks[i].classList.contains('fa-warning')){
+            isValid = false;
+            break;
+        }
+    }
+    
+    var button = document.getElementById('createButton');
+    if(button.classList.contains('list-group-item-valid') && !isValid){
+        button.classList.remove('list-group-item-valid');
+        button.classList.add('list-group-item-invalid');
+    } else if(isValid){
+        button.classList.remove('list-group-item-invalid');
+        button.classList.add('list-group-item-valid');
+    }
+
+}
+
+function setNavigation(){
+    var path = window.location.pathname;
+    path = path.replace(/\/$/, "");
+    path = decodeURIComponent(path);
+    
+    $(".navbar-nav li a").each(function () {
+        var href = $(this).attr('href');
+        if (path.substring(0, href.length) === href) {
+            $(this).closest('li').addClass('active');
+        }
+    });
+}
+
+$(document).ready(function() {    
+    setNavigation();
     
     $('input').on('blur keyup', function() {
         var inputName = $(this).attr('name');
@@ -67,9 +110,6 @@ $(document).ready(function() {
             case 'source_name':
             case 'base_url':
                 defineValid('basic-info');
-                break;
-            case 'tor_password':
-                defineValid('antiblock', 'ip', 'tor');
                 break;
             case 'proxy_list':
                 defineValid('antiblock', 'ip', 'proxy');
@@ -98,7 +138,7 @@ function showBlock(clicked_id){
 
     var blocks = document.getElementsByClassName('block');
     for (var i = 0; i < blocks.length; i++)
-    blocks[i].setAttribute('hidden', true);
+        blocks[i].setAttribute('hidden', true);
     
     var blockId = clicked_id + "-block";
     var block = document.getElementById(blockId);
@@ -143,12 +183,11 @@ function detailIpRotationType(){
 function detailAntiblock(){
     var mainSelect = document.getElementById("id_antiblock");
     const antiblock_type = mainSelect.options[mainSelect.selectedIndex].value;
-
+    
     var contents = document.getElementsByClassName("content-div");
     for (const i in contents)
         contents[i].hidden = true;
     document.getElementById(antiblock_type).hidden = false;
-
-    console.log("tipo: " + antiblock_type);
+    
     defineValid('antiblock', antiblock_type);
 }

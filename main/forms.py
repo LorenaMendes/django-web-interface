@@ -9,21 +9,20 @@ class CrawlRequestForm(forms.ModelForm):
 
         # Options for IP rotation
         ip_type = forms.ChoiceField(required=False)
-        tor_password = forms.CharField(required=False)
-        proxy_list = forms.FileField(required=False)
+        proxy_list = forms.CharField(required=False)
         max_reqs_per_ip = forms.IntegerField(required=False)
         max_reuse_rounds = forms.IntegerField(required=False)
         
         # Options for User Agent rotation
         reqs_per_user_agent = forms.IntegerField(required=False)
-        user_agents_file = forms.FileField(required=False)
+        user_agents_file = forms.CharField(required=False)
         
         # Options for Delay
         delay_secs = forms.IntegerField(required=False)
         delay_type = forms.ChoiceField(required=False)
         
         # Options for Cookies
-        cookies_file = forms.FileField(required=False)
+        cookies_file = forms.CharField(required=False)
         persist_cookies = forms.BooleanField(required=False)
 
         # Options for Captcha
@@ -39,7 +38,6 @@ class CrawlRequestForm(forms.ModelForm):
             'antiblock',
             'captcha',
             'ip_type',
-            'tor_password',
             'max_reqs_per_ip',
             'max_reuse_rounds',
             'proxy_list',
@@ -81,16 +79,15 @@ class RawCrawlRequestForm(forms.Form):
         ('tor', 'Tor'), 
         ('proxy', 'Proxy'),
     ), widget=forms.Select(attrs={'onchange': 'detailIpRotationType();'}))
-    tor_password = forms.CharField(required=False, label="Tor Password", max_length=20,
-        widget=forms.TextInput(attrs={'placeholder': 'Password'})
-    )
-    proxy_list = forms.FileField(required=False, label="Proxy List")
+    proxy_list = forms.CharField(required=False, max_length=2000, label="Proxy List",
+        widget=forms.TextInput(attrs={'placeholder': 'Paste here the content of your proxy list file'}))
     max_reqs_per_ip = forms.IntegerField(required=False, label="Max Requisitions per IP")
     max_reuse_rounds = forms.IntegerField(required=False, label="Max Reuse Rounds")
     
     # Options for User Agent rotation
     reqs_per_user_agent = forms.IntegerField(required=False, label="Requests per User Agent")
-    user_agents_file = forms.FileField(required=False, label="User Agents File")
+    user_agents_file = forms.CharField(required=False, max_length=2000, label="User Agents File",
+        widget=forms.TextInput(attrs={'placeholder': 'Paste here the content of your user agents file'}))
     delay_secs = forms.IntegerField(required=False, label="Delay in Seconds")
 
     # Options for Delay
@@ -101,7 +98,8 @@ class RawCrawlRequestForm(forms.Form):
     ))
 
     # Options for Cookies
-    cookies_file = forms.FileField(required=False, label="Cookies File")
+    cookies_file = forms.CharField(required=False, max_length=2000, label="Cookies File",
+        widget=forms.TextInput(attrs={'placeholder': 'Paste here the content of your cookies file'}))
     persist_cookies = forms.BooleanField(required=False, label="Persist Cookies")
     
     # Options for Captcha

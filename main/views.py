@@ -4,38 +4,30 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .forms import CrawlRequestForm, RawCrawlRequestForm
 from .models import CrawlRequest
 
-def home(response):
-    return render(response, "main/home.html", {})
+def getAllData():
+    return CrawlRequest.objects.all().order_by('-creation_date')
+
+def list_crawlers(response):
+    context = {'allcrawlers': getAllData()}
+    return render(response, "main/list_crawlers.html", context)
 
 def monitoring(response):
     return HttpResponseRedirect("http://localhost:5000/")
-    # return render(response, "main/monitoring.html", {})
 
-def create_crawl(response):
+def create_crawler(response):
     context = {}
     if response.method == "POST":
         my_form = RawCrawlRequestForm(response.POST)
-        
         if my_form.is_valid():
             new_crawl = CrawlRequestForm(my_form.cleaned_data)
             new_crawl.save()
-
             
-            context['url'] = my_form.cleaned_data['base_url']
-            
-            return render(response, "main/steps_creation.html", context)
+            return HttpResponseRedirect('http://localhost:8000/crawlers/')
+            # return render(response, "main/list_crawlers.html", context)
     else:
         my_form = RawCrawlRequestForm()
-    
     context['form'] = my_form
-    return render(response, "main/create_crawl.html", context)
+    return render(response, "main/create_crawler.html", context)
 
 def create_steps(response):
-    
-    print('################################3')
-    print(response)
-    print('################################3')
-    print("Estou no create_steps")
-    print('################################3')
-    
     return render(response, "main/steps_creation.html", {})
