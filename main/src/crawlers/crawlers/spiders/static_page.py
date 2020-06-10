@@ -8,15 +8,19 @@ import os
 import re
 import json
 import random
+import datetime
+import hashlib
 
-import sys
-sys.path.append("../")
-from param_injection import ParamInjector
+# import sys
+# sys.path.append("../")
+# from param_injection import ParamInjectors
+# from parsing_html_table_standalone import 
 
 class SeleniumSpider(scrapy.Spider):
     name = 'static_page'    
 
     def __init__(self, crawler_id, *a, **kw):
+        self.crawler_id = crawler_id
         with open(f"config/{crawler_id}_config.json", "r") as f:
             self.config = json.loads(f.read())
 
@@ -31,17 +35,21 @@ class SeleniumSpider(scrapy.Spider):
                 os.mkdir(f)
             except FileExistsError:
                 pass
+        
+        with open(f"data/{crawler_id}/files/file_description.txt", "a+") as f:
+            pass
 
     def start_requests(self):
         if self.config["url"]["type"] == "simple":
             urls = [self.config["url"]["url"]]
         elif self.config["url"]["type"] == "template":
-            urls = ParamInjector.generate_format(
-                self.config["url"]["tamplate_params"]["code_format"],
-                self.config["url"]["tamplate_params"]["param_limits"],
-                self.config["url"]["tamplate_params"]["verif"],
-                self.config["url"]["tamplate_params"]["verif_index"],
-            )
+            # urls = ParamInjector.generate_format(
+            #     self.config["url"]["tamplate_params"]["code_format"],
+            #     self.config["url"]["tamplate_params"]["param_limits"],
+            #     self.config["url"]["tamplate_params"]["verif"],
+            #     self.config["url"]["tamplate_params"]["verif_index"],
+            # )
+            pass
         else:
             raise ValueError
         
@@ -58,9 +66,28 @@ class SeleniumSpider(scrapy.Spider):
         else:
             raise ValueError
 
+    def hash(self, string):
+        return hashlib.md5(string.encode()).hexdigest()
+
     def store_raw(self, response):
-        """TODO Save a non-html file"""
-        pass
+        """Store file, TODO convert to csv?"""
+        assert response.headers['Content-type'] != b'text/html'
+
+        file_format = str(response.headers['Content-type']).split("/")[1][:-1]
+        hsh = self.hash(response.url)
+        content = {
+            "hash": hsh,
+            "url": response.url,
+            "crawler_id": self.crawler_id,
+            "type": str(response.headers['Content-type']),
+            "crawled_at_date": str(datetime.datetime.today()),
+        }
+
+        with open(f"data/{self.crawler_id}/files/{hsh}.{file_format}", "wb") as f:
+            f.write(response.body)
+
+        with open(f"data/{self.crawler_id}/files/file_description.txt", "a+") as f:
+            f.write(json.dumps(content) + '\n')
 
     def extract_and_store_csv(self, response):
         """
@@ -70,12 +97,23 @@ class SeleniumSpider(scrapy.Spider):
         pass
 
     def store_html(self, response):
-        """TODO Save html file"""
-        pass
+        """
+        """
+        assert response.headers['Content-type'] == b'text/html'
+        
+        content = {
+            "url": response.url,
+            "crawler_id": self.crawler_id,
+            "crawled_at_date": str(datetime.datetime.today()),
+            "html": str(response.body),
+        }
+
+        with open(f"data/{self.crawler_id}/raw_pages/{self.hash(response.url)}.json", "w+") as f:
+            f.write(json.dumps(content, indent=2))
 
     def parse(self, response):
         # self.logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>> {response.url}")
-        self.logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>> {response.headers['Content-type']}")
+        self.logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {response.headers['Content-type']}")
         
         self.extract_and_store_csv(response)
 
@@ -103,28 +141,21 @@ class SeleniumSpider(scrapy.Spider):
                     strip=if_present("strip", True) 
                 )
 
+                # As I could not make the allow parameter work, the code check the regex on the urls here
                 for url in links_extractor.extract_links(response):
                     match = False
                     if "allow" in self.config["link_extractor"]:
                         for pattern in self.config["link_extractor"]["allow"]:
-                            if re.search(pattern, url.url) is not None:
-                                match = True               
+                            match = match or (re.search(pattern, url.url) is not None)
                     else:
                         match = True
                     
                     if match:
-                        # self.logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>> {temp} found: {url}")
+                        # self.logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> would call: {url.url}")
                         yield scrapy.Request(url=url.url, callback=self.parse)
-                    else:
-                        # self.logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>> excluded: {url}")
-                        pass
-            else:
-                self.store_raw(response)
-
-
-"""
-TODO:
-- make kafka start crawlers
-- take log from kafka and show in the UI
-- the generic spiders for the other type of crawlers
-"""
+                # Fixing the allow parameter, just change the code above by the code commented below
+                # for url in links_extractor.extract_links(response):
+                #     yield scrapy.Request(url=url.url, callback=self.parse)
+                # END CODE
+        else:
+            self.store_raw(response)
