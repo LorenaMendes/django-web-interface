@@ -1,8 +1,21 @@
 from django.db import models
+from django.utils import timezone
 
-# Create your models here.
+class TimeStamped(models.Model):
+    creation_date = models.DateTimeField()
+    last_modified = models.DateTimeField()
 
-class CrawlRequest(models.Model):
+    def save(self, *args, **kwargs):
+        if not self.creation_date:
+            self.creation_date = timezone.now()
+
+        self.last_modified = timezone.now()
+        return super(TimeStamped, self).save(*args, **kwargs)
+
+    class Meta:
+        abstract = True
+
+class CrawlRequest(TimeStamped):
     source_name = models.CharField(max_length=200)
     base_url  = models.CharField(max_length=200)
     obey_robots = models.BooleanField(blank=True, null=True)
@@ -35,21 +48,20 @@ class CrawlRequest(models.Model):
     # Options for antiblock
         # Options for IP rotation
     ip_type = models.CharField(max_length=15, choices=IP_TYPE, null=True, blank=True)
-    tor_password = models.CharField(max_length=20, null=True) # available for Tor
-    proxy_list = models.FileField(max_length=20, blank=True, null=True, upload_to=None) # available for Proxy List
+    proxy_list = models.CharField(max_length=2000, blank=True, null=True) # available for Proxy List
     max_reqs_per_ip = models.IntegerField(blank=True, null=True)
     max_reuse_rounds = models.IntegerField(blank=True, null=True)
 
         # Options for User Agent rotation 
     reqs_per_user_agent = models.IntegerField(blank=True, null=True)
-    user_agents_file = models.FileField(max_length=20, blank=True, upload_to=None)
+    user_agents_file = models.CharField(max_length=2000, blank=True, null=True)
     
         # Options for Delay
     delay_secs = models.IntegerField(blank=True, null=True)
-    delay_type = models.CharField(max_length=15, choices=DELAY_TYPE, null=True, blank=True)
+    delay_type = models.CharField(max_length=15, choices=DELAY_TYPE, blank=True, null=True)
         
         # Options for Cookies
-    cookies_file = models.FileField(max_length=20, blank=True, upload_to=None)
+    cookies_file = models.CharField(max_length=2000, blank=True, null=True)
     persist_cookies = models.BooleanField(blank=True, null=True)
 
     captcha = models.CharField(max_length=15, choices=CAPTCHA_TYPE, default='1')

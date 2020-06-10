@@ -1,0 +1,41 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<div class="row" id="body-row">
+
+    <!-- <div id="sidebar-container" class="sidebar-expanded d-none d-md-block col-1">
+        
+    </div> -->
+    <div class="container col ">
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Source Name</th>
+                    <th scope="col">Base URL</th>
+                    <th scope="col">Created at</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for crawler in allcrawlers %}
+                <tr>
+                    <td>{{crawler.source_name }}</td>
+                    <td>{{crawler.base_url }}</td>
+                    <td>{{crawler.creation_date }}</td>
+                    <td>Running</td>
+                    <td><button class="btn btn-success">Run</button>
+                        <button class="btn btn-danger">Stop</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+    {% endblock %}
