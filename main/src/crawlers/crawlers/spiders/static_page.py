@@ -40,18 +40,19 @@ class SeleniumSpider(scrapy.Spider):
             pass
 
     def start_requests(self):
-        if self.config["url"]["type"] == "simple":
-            urls = [self.config["url"]["url"]]
-        elif self.config["url"]["type"] == "template":
-            # urls = ParamInjector.generate_format(
-            #     self.config["url"]["tamplate_params"]["code_format"],
-            #     self.config["url"]["tamplate_params"]["param_limits"],
-            #     self.config["url"]["tamplate_params"]["verif"],
-            #     self.config["url"]["tamplate_params"]["verif_index"],
-            # )
-            pass
-        else:
-            raise ValueError
+        urls = [self.config["base_url"]]
+        # if self.config["url"]["type"] == "simple":
+        #     urls = [self.config["url"]["url"]]
+        # elif self.config["url"]["type"] == "template":
+        #     # urls = ParamInjector.generate_format(
+        #     #     self.config["url"]["tamplate_params"]["code_format"],
+        #     #     self.config["url"]["tamplate_params"]["param_limits"],
+        #     #     self.config["url"]["tamplate_params"]["verif"],
+        #     #     self.config["url"]["tamplate_params"]["verif_index"],
+        #     # )
+        #     pass
+        # else:
+        #     raise ValueError
         
         if self.config["crawler_type"] == "single_file":
             raise ValueError
@@ -120,33 +121,35 @@ class SeleniumSpider(scrapy.Spider):
         if response.headers['Content-type'] == b'text/html':
             self.store_html(response)
 
-            if "link_extractor" in self.config:
+            if self.config["explore_links"]:
                 # self.logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>> {self.config['link_extractor']}")
-                if_present = lambda key, default: key if key in self.config["link_extractor"] else default
+                # if_present = lambda key, default: key if key in self.config["link_extractor"] else default
                 links_extractor = LinkExtractor(
-                    # TODO: cant make regex tested on https://regexr.com/ to work here for some reason
-                    # allow=if_present("allow", ())
-                    deny=if_present("deny", ()),
-                    allow_domains=if_present("allow_domains", ()),
-                    deny_domains=if_present("deny_domains", ()),
-                    # Note here: changed the default value. It would ignore all links with extensions
-                    deny_extensions=if_present("deny_extensions", []), 
-                    restrict_xpaths=if_present("restrict_xpaths", ()),
-                    restrict_css=if_present("restrict_css", ()),
-                    tags=if_present("tags", 'a'),
-                    attrs=if_present("attrs", 'href'),
-                    canonicalize=if_present("canonicalize", False),
-                    unique=if_present("unique", True),
-                    process_value=if_present("process_value", None),
-                    strip=if_present("strip", True) 
+                    # # TODO: cant make regex tested on https://regexr.com/ to work here for some reason
+                    # # allow=if_present("allow", ())
+                    # deny=if_present("deny", ()),
+                    # allow_domains=if_present("allow_domains", ()),
+                    # deny_domains=if_present("deny_domains", ()),
+                    # # Note here: changed the default value. It would ignore all links with extensions
+                    # deny_extensions=if_present("deny_extensions", []), 
+                    # restrict_xpaths=if_present("restrict_xpaths", ()),
+                    # restrict_css=if_present("restrict_css", ()),
+                    # tags=if_present("tags", 'a'),
+                    # attrs=if_present("attrs", 'href'),
+                    # canonicalize=if_present("canonicalize", False),
+                    # unique=if_present("unique", True),
+                    # process_value=if_present("process_value", None),
+                    # strip=if_present("strip", True) 
                 )
 
                 # As I could not make the allow parameter work, the code check the regex on the urls here
                 for url in links_extractor.extract_links(response):
                     match = False
-                    if "allow" in self.config["link_extractor"]:
-                        for pattern in self.config["link_extractor"]["allow"]:
-                            match = match or (re.search(pattern, url.url) is not None)
+                    if self.config["link_extractor_allow"] != "":
+                        # for pattern in self.config["link_extractor_allow"]:
+                        #     match = match or (re.search(pattern, url.url) is not None)
+                        match = match or (re.search(self.config["link_extractor_allow"], url.url) is not None)
+
                     else:
                         match = True
                     
