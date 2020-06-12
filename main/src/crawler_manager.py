@@ -8,12 +8,13 @@ def gen_random_key():
 
 def start_crawler(config):
     crawler_id = gen_random_key()
-    with open(f"crawlers/config/{crawler_id}_config.json", "w+") as f:
+    print(os.getcwd())
+    with open(f"main/src/crawlers/config/{crawler_id}_config.json", "w+") as f:
         f.write(json.dumps(config, indent=2))
     
-    start = f"nohup scrapy crawl static_page -a crawler_id={crawler_id}"
-    redirect_output = f"> log/{crawler_id}.txt 2>&1"
-    get_pid = f"& echo $! > crawler_pid/{crawler_id}.txt"
+    start = f"nohup scrapy crawl static_page -a crawler_id={crawler_id} "
+    redirect_output = f"> log/{crawler_id}.txt 2>&1 "
+    get_pid = f"& echo $! > crawler_pid/{crawler_id}.txt "
 
     command = start + redirect_output + get_pid
 

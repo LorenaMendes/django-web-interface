@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from .forms import CrawlRequestForm, RawCrawlRequestForm
 from .models import CrawlRequest
+from .src.crawler_manager import start_crawler
 
 def getAllData():
     return CrawlRequest.objects.all().order_by('-creation_date')
@@ -31,3 +32,11 @@ def create_crawler(response):
 
 def create_steps(response):
     return render(response, "main/steps_creation.html", {})
+
+def manage_crawl(response, instance_id):
+    
+    data = CrawlRequest.objects.filter(id=instance_id).values()[0]
+    del data['creation_date']
+    del data['last_modified']
+
+    command, instance_id = start_crawler(data)

@@ -191,3 +191,14 @@ function detailAntiblock(){
     
     defineValid('antiblock', antiblock_type);
 }
+
+function runScript(id) {
+    console.log("entrei aqui");
+    $.ajax({
+        url: 'manage_crawl/' + id, //The URL you defined in urls.py
+        success: function(data) {
+          //If you wish you can do additional data manipulation here.
+        }
+
+    });
+}
