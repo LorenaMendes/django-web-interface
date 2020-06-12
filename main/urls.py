@@ -7,4 +7,5 @@ urlpatterns = [
     path("create_crawler/", views.create_crawler, name="create_crawler"),
     path("crawlers/steps/", views.create_steps, name="create_steps"),
     path("monitoring/", views.monitoring, name="monitoring"),
+    path("crawlers/manage_crawl/<int:instance_id>", views.manage_crawl, name="manage_crawl"),
 ]
