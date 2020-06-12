@@ -19,6 +19,8 @@ class CrawlRequest(TimeStamped):
     source_name = models.CharField(max_length=200)
     base_url  = models.CharField(max_length=200)
     obey_robots = models.BooleanField(blank=True, null=True)
+    
+
     ANTIBLOCK_TYPE = [
         ('none', 'None'),
         ('ip', 'IP rotation'),
@@ -26,27 +28,14 @@ class CrawlRequest(TimeStamped):
         ('delay', 'Delays'),
         ('cookies', 'Use cookies'),
     ]
-    
-    IP_TYPE = [
-        ('tor', 'Tor'),
-        ('proxy', 'Proxy'),
-    ]
-    
-    CAPTCHA_TYPE = [
-        ('none', 'None'), 
-        ('image', 'Image'),
-        ('sound', 'Sound'),
-    ]
-
-    DELAY_TYPE = [
-        ('random', 'Random'), 
-        ('fixed', 'Fixed'),
-    ]
-
     antiblock = models.CharField(max_length=15, choices=ANTIBLOCK_TYPE, default='none')
     
     # Options for antiblock
         # Options for IP rotation
+    IP_TYPE = [
+        ('tor', 'Tor'),
+        ('proxy', 'Proxy'),
+    ]
     ip_type = models.CharField(max_length=15, choices=IP_TYPE, null=True, blank=True)
     proxy_list = models.CharField(max_length=2000, blank=True, null=True) # available for Proxy List
     max_reqs_per_ip = models.IntegerField(blank=True, null=True)
@@ -58,13 +47,23 @@ class CrawlRequest(TimeStamped):
     
         # Options for Delay
     delay_secs = models.IntegerField(blank=True, null=True)
+
+    DELAY_TYPE = [
+        ('random', 'Random'), 
+        ('fixed', 'Fixed'),
+    ]
     delay_type = models.CharField(max_length=15, choices=DELAY_TYPE, blank=True, null=True)
         
         # Options for Cookies
     cookies_file = models.CharField(max_length=2000, blank=True, null=True)
     persist_cookies = models.BooleanField(blank=True, null=True)
 
-    captcha = models.CharField(max_length=15, choices=CAPTCHA_TYPE, default='1')
+    CAPTCHA_TYPE = [
+        ('none', 'None'), 
+        ('image', 'Image'),
+        ('sound', 'Sound'),
+    ]
+    captcha = models.CharField(max_length=15, choices=CAPTCHA_TYPE, default='none')
 
     # Options for captcha
         # Options for image
@@ -73,6 +72,17 @@ class CrawlRequest(TimeStamped):
         # Options for sound
     sound_xpath = models.CharField(max_length=100, blank=True, null=True)
     sound_url = models.CharField(max_length=100, blank=True, null=True)
+
+    CRAWLER_TYPE = [
+        ('static_page', 'Static Page'), 
+        ('form_page', 'Page with Form'),
+        ('single_file', 'Single File'),
+        ('bundle_file', 'Bundle File'),
+    ]
+    crawler_type = models.CharField(max_length=15, choices=CRAWLER_TYPE, default='static_page')
+    explore_links = models.BooleanField(blank=True, null=True)
+    link_extractor_max_depht = models.IntegerField(blank=True, null=True)
+    link_extractor_allow = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.source_name

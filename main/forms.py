@@ -31,6 +31,12 @@ class CrawlRequestForm(forms.ModelForm):
         sound_url = forms.CharField(required=False)
         sound_xpath = forms.CharField(required=False)
 
+        # Crawler type
+        crawler_type = forms.CharField(required=False)
+        explore_links = forms.BooleanField(required=False)
+        link_extractor_max_depht = forms.IntegerField(required=False)
+        link_extractor_allow = forms.CharField(required=False)
+
         fields = [
             'source_name',
             'base_url',
@@ -51,6 +57,10 @@ class CrawlRequestForm(forms.ModelForm):
             'img_xpath',
             'sound_url',
             'sound_xpath',
+            'crawler_type',
+            'explore_links',
+            'link_extractor_max_depht',
+            'link_extractor_allow',
         ]
 
 class RawCrawlRequestForm(forms.Form):
@@ -115,3 +125,14 @@ class RawCrawlRequestForm(forms.Form):
     sound_xpath = forms.CharField(required=False, label="Sound Xpath", max_length=100,
         widget=forms.TextInput(attrs={'placeholder': 'Sound Xpath'})
     )
+    
+    crawler_type = forms.ChoiceField(required=False, choices = (
+        ('static_page', 'Static Page'), 
+        ('form_page', 'Page with Form'),
+        ('single_file', 'Single File'),
+        ('bundle_file', 'Bundle File'),
+    ), widget=forms.Select(attrs={'onchange': 'detailCrawlerType();'}))
+    explore_links = forms.BooleanField(required=False, label="Explore links")
+    link_extractor_max_depht = forms.IntegerField(required=False, label="Link extractor max depth")
+    link_extractor_allow = forms.CharField(required=False, max_length=2000, label="Link extractor allow",
+        widget=forms.TextInput(attrs={'placeholder': 'Regex for allowing on link extractor'}))

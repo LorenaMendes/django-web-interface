@@ -192,6 +192,18 @@ function detailAntiblock(){
     defineValid('antiblock', antiblock_type);
 }
 
+function detailCrawlerType(){
+    var mainSelect = document.getElementById("id_crawler_type");
+    const crawler_type = mainSelect.options[mainSelect.selectedIndex].value;
+    
+    var contents = document.getElementsByClassName("content-div");
+    for (const i in contents)
+        contents[i].hidden = true;
+    document.getElementById(crawler_type).hidden = false;
+    
+    defineValid('crawler_type', crawler_type);
+}
+
 function runScript(id) {
     console.log("entrei aqui");
     $.ajax({
