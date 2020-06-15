@@ -2,6 +2,8 @@ import scrapy
 from scrapy.crawler import CrawlerProcess
 from scrapy.linkextractors import LinkExtractor
 
+from main.src.base_spider import BaseSpider
+
 import requests
 import logging
 import os
@@ -11,33 +13,8 @@ import random
 import datetime
 import hashlib
 
-# import sys
-# sys.path.append("../")
-# from param_injection import ParamInjectors
-# from parsing_html_table_standalone import 
-
-class SeleniumSpider(scrapy.Spider):
+class StaticPageSpider(BaseSpider):
     name = 'static_page'    
-
-    def __init__(self, crawler_id, *a, **kw):
-        self.crawler_id = crawler_id
-        with open(f"config/{crawler_id}_config.json", "r") as f:
-            self.config = json.loads(f.read())
-
-        folders = [
-            f"data/{crawler_id}",
-            f"data/{crawler_id}/raw_pages",
-            f"data/{crawler_id}/csv",
-            f"data/{crawler_id}/files",
-        ]
-        for f in folders:
-            try:
-                os.mkdir(f)
-            except FileExistsError:
-                pass
-        
-        with open(f"data/{crawler_id}/files/file_description.txt", "a+") as f:
-            pass
 
     def start_requests(self):
         urls = [self.config["base_url"]]
@@ -67,52 +44,11 @@ class SeleniumSpider(scrapy.Spider):
         else:
             raise ValueError
 
-    def hash(self, string):
-        return hashlib.md5(string.encode()).hexdigest()
-
-    def store_raw(self, response):
-        """Store file, TODO convert to csv?"""
-        assert response.headers['Content-type'] != b'text/html'
-
-        file_format = str(response.headers['Content-type']).split("/")[1][:-1]
-        hsh = self.hash(response.url)
-        content = {
-            "hash": hsh,
-            "url": response.url,
-            "crawler_id": self.crawler_id,
-            "type": str(response.headers['Content-type']),
-            "crawled_at_date": str(datetime.datetime.today()),
-        }
-
-        with open(f"data/{self.crawler_id}/files/{hsh}.{file_format}", "wb") as f:
-            f.write(response.body)
-
-        with open(f"data/{self.crawler_id}/files/file_description.txt", "a+") as f:
-            f.write(json.dumps(content) + '\n')
-
-    def extract_and_store_csv(self, response):
-        """
-        Try to extract a csv from response data
-        TODO Chama metodo do Caio
-        """
-        pass
-
-    def store_html(self, response):
-        """
-        """
-        assert response.headers['Content-type'] == b'text/html'
-        
-        content = {
-            "url": response.url,
-            "crawler_id": self.crawler_id,
-            "crawled_at_date": str(datetime.datetime.today()),
-            "html": str(response.body),
-        }
-
-        with open(f"data/{self.crawler_id}/raw_pages/{self.hash(response.url)}.json", "w+") as f:
-            f.write(json.dumps(content, indent=2))
-
     def parse(self, response):
+        """
+        Parse responses of static pages.
+        Will try to follow links if config["explor_links"] is set.
+        """
         # self.logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>> {response.url}")
         self.logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {response.headers['Content-type']}")
         
