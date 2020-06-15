@@ -12,8 +12,6 @@ def list_crawlers(response):
     context = {'allcrawlers': getAllData()}
     return render(response, "main/list_crawlers.html", context)
 
-def monitoring(response):
-    return HttpResponseRedirect("http://localhost:5000/")
 
 def create_crawler(response):
     context = {}
@@ -30,6 +28,19 @@ def create_crawler(response):
     context['form'] = my_form
     return render(response, "main/create_crawler.html", context)
 
+def delete_crawler(request, id):
+    crawler = CrawlRequest.objects.get(id=id)
+    
+    if request.method == 'POST':
+        crawler.delete()
+        return HttpResponseRedirect('http://localhost:8000/crawlers/')
+    
+    return render(request, 'main/confirm_delete_modal.html', {'crawler': crawler})
+
+
+def monitoring(response):
+    return HttpResponseRedirect("http://localhost:5000/")
+
 def create_steps(response):
     return render(response, "main/steps_creation.html", {})
 
@@ -40,3 +51,8 @@ def manage_crawl(response, instance_id):
     del data['last_modified']
 
     command, instance_id = start_crawler(data)
+
+    print("*******************")
+    print(command)
+    print("*******************")
+    return render(response, "main/list_crawlers.html", {})

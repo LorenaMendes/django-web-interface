@@ -1,7 +1,7 @@
 {
-  "id": 12,
-  "source_name": "Coleta da Lorena",
-  "base_url": "https://trf.com.br",
+  "id": 16,
+  "source_name": "Lorena",
+  "base_url": "teste.com",
   "obey_robots": false,
   "antiblock": "none",
   "ip_type": "tor",
@@ -18,5 +18,9 @@
   "img_xpath": null,
   "img_url": null,
   "sound_xpath": null,
-  "sound_url": null
+  "sound_url": null,
+  "crawler_type": "static_page",
+  "explore_links": true,
+  "link_extractor_max_depht": 2,
+  "link_extractor_allow": "(^https\\:\\/\\/saolourenco\\.mg\\.gov\\.br\\/poficiais\\.php|^https\\:\\/\\/saolourenco\\.mg\\.gov\\.br\\/arquivos\\/publicacaooficial\\/)"
 }
