@@ -64,14 +64,13 @@ class CrawlRequest(TimeStamped):
         ('sound', 'Sound'),
     ]
     captcha = models.CharField(max_length=15, choices=CAPTCHA_TYPE, default='none')
-
+    has_webdriver = models.BooleanField(blank=True, null=True)
+    webdriver_path = models.CharField(max_length=1000, blank=True, null=True)
     # Options for captcha
         # Options for image
     img_xpath = models.CharField(max_length=100, blank=True, null=True)
-    img_url = models.CharField(max_length=100, blank=True, null=True)
         # Options for sound
     sound_xpath = models.CharField(max_length=100, blank=True, null=True)
-    sound_url = models.CharField(max_length=100, blank=True, null=True)
 
     CRAWLER_TYPE = [
         ('static_page', 'Static Page'), 
@@ -82,7 +81,7 @@ class CrawlRequest(TimeStamped):
     crawler_type = models.CharField(max_length=15, choices=CRAWLER_TYPE, default='static_page')
     explore_links = models.BooleanField(blank=True, null=True)
     link_extractor_max_depht = models.IntegerField(blank=True, null=True)
-    link_extractor_allow = models.CharField(max_length=100, blank=True, null=True)
+    link_extractor_allow = models.CharField(max_length=1000, blank=True, null=True)
 
     def __str__(self):
         return self.source_name

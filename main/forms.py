@@ -26,9 +26,9 @@ class CrawlRequestForm(forms.ModelForm):
         persist_cookies = forms.BooleanField(required=False)
 
         # Options for Captcha
-        img_url = forms.CharField(required=False)
+        has_webdriver = forms.BooleanField(required=False)
+        webdriver_path = forms.CharField(required=False)
         img_xpath = forms.CharField(required=False)
-        sound_url = forms.CharField(required=False)
         sound_xpath = forms.CharField(required=False)
 
         # Crawler type
@@ -53,9 +53,9 @@ class CrawlRequestForm(forms.ModelForm):
             'delay_type',
             'cookies_file',
             'persist_cookies',
-            'img_url',
+            'has_webdriver',
+            'webdriver_path',
             'img_xpath',
-            'sound_url',
             'sound_xpath',
             'crawler_type',
             'explore_links',
@@ -113,14 +113,12 @@ class RawCrawlRequestForm(forms.Form):
     persist_cookies = forms.BooleanField(required=False, label="Persist Cookies")
     
     # Options for Captcha
-    img_url = forms.CharField(required=False, label="Image URL", max_length=100,
-        widget=forms.TextInput(attrs={'placeholder': 'Image URL'})
-    )
+    has_webdriver = forms.BooleanField(required=False, label="Use webdriver",
+        widget = forms.CheckboxInput(attrs={'onchange': 'detailWebdriverType(); defineValid("captcha")'}))
+    webdriver_path = forms.CharField(required=False, max_length=2000, label="Download directory",
+        widget=forms.TextInput(attrs={'placeholder': 'Download directory path'}))
     img_xpath = forms.CharField(required=False, label="Image Xpath", max_length=100,
         widget=forms.TextInput(attrs={'placeholder': 'Image Xpath'})
-    )
-    sound_url = forms.CharField(required=False, label="Sound URL", max_length=100,
-        widget=forms.TextInput(attrs={'placeholder': 'Sound URL'})
     )
     sound_xpath = forms.CharField(required=False, label="Sound Xpath", max_length=100,
         widget=forms.TextInput(attrs={'placeholder': 'Sound Xpath'})
