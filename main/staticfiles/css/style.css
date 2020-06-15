@@ -122,3 +122,7 @@ body {
 .list-group-mine .list-group-item{
     background-color: #333;
 }
+
+.confimation-div{
+    text-align: center;
+}

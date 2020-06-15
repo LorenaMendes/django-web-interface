@@ -1,3 +1,22 @@
+// Get the modal
+var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+    modal.style.display = "none";
+    }
+}
+
+$(document).on('click', '.confirm-delete', function () {
+    $("#confirmDeleteModal").attr("caller-id", $(this).attr("id"));
+});
+
+$(document).on('click', '#confirmDeleteButtonModal', function () {
+    var caller = $("#confirmDeleteButtonModal").closest(".modal").attr("caller-id");
+    window.location = $("#".concat(caller)).attr("href");
+});
+
 function defineIcon(section, isValid){
     var sectionId = '#' + section + '-valid-icon';
     if (isValid) {
@@ -57,11 +76,20 @@ function defineValid(section, subsection1 = '', subsection2 = ''){
             }
             break;
         case 'captcha':
+            var isValid = true;
+            if(document.getElementById("id_has_webdriver").checked && document.getElementById("id_webdriver_path").value.length <= 0){
+                defineIcon(section, false);
+                break;
+            }
             switch(subsection1){
-                case '':
-                    defineIcon(section, true);
+                case 'image':
+                    isValid = document.getElementById('id_img_xpath').value.length > 0;
+                    break;
+                case 'sound':
+                    isValid = document.getElementById('id_sound_xpath').value.length > 0;
                     break;
             }
+            defineIcon(section, isValid);
             break;
     }
 
@@ -128,6 +156,15 @@ $(document).ready(function() {
             case 'cookies_file':
                 defineValid('antiblock', 'cookies');
                 break;
+            case 'img_xpath':
+                defineValid('captcha', 'image');
+                break;
+            case 'sound_xpath':
+                defineValid('captcha', 'sound');
+                break;
+            case 'webdriver_path':
+                defineValid('captcha');
+                break;
 
         }
 
@@ -155,17 +192,24 @@ function submit(){
     document.getElementById("myForm").submit();
 }
 
+function detailWebdriverType(){
+    var webdriverBool = document.getElementById("id_has_webdriver");
+    document.getElementById("webdriver_path_div").hidden = !webdriverBool.checked;
+    
+}
+
 function detailCaptcha(){
     var mainSelect = document.getElementById("id_captcha");
     const captcha_type = mainSelect.options[mainSelect.selectedIndex].value;
-    var captchaDiv = document.getElementById("captchaDiv");
     
-    if(captcha_type == "none") captchaDiv.innerHTML = ``
-    else if(captcha_type == "image"){
-        
-    } else if(captcha_type == "sound"){
-        
-    }
+    document.getElementById('webdriver').hidden = captcha_type == 'none' ? true : false;
+
+    var contents = document.getElementsByClassName("content-div");
+    for (const i in contents)
+        contents[i].hidden = true;
+    document.getElementById(captcha_type).hidden = false;
+    
+    defineValid('captcha', captcha_type);
 }
 
 function detailIpRotationType(){
@@ -205,7 +249,6 @@ function detailCrawlerType(){
 }
 
 function runScript(id) {
-    console.log("entrei aqui");
     $.ajax({
         url: 'manage_crawl/' + id, //The URL you defined in urls.py
         success: function(data) {

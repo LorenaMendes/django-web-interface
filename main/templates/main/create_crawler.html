@@ -70,7 +70,7 @@ New Crawler
                         <span class="menu-collapsed">Crawler Type</span>
                     </div>
                     <div class="col-md-2">
-                        <span id="crawler-type-valid-icon" class="fa fa-warning fa-fw mr-3 crawler-type-valid-icon"></span>
+                        <span id="crawler-type-valid-icon" class="fa fa-check fa-fw mr-3 crawler-type-valid-icon"></span>
                     </div>
                 </div>
             </a>
@@ -163,12 +163,16 @@ New Crawler
                                 {{ form.captcha | as_crispy_field}}
                                 <div id="captchaDiv">
                                     <div class="content-div" id="image" hidden>
-                                        {{ form.img_url | as_crispy_field}}
                                         {{ form.img_xpath | as_crispy_field}}
                                     </div>
                                     <div class="content-div" id="sound" hidden>
-                                        {{ form.sound_url | as_crispy_field}}
                                         {{ form.sound_xpath | as_crispy_field}}
+                                    </div>
+                                    <div class="webdriver-div" id="webdriver" hidden>
+                                        {{ form.has_webdriver | as_crispy_field}}
+                                        <div id="webdriver_path_div" hidden>
+                                            {{ form.webdriver_path | as_crispy_field}}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

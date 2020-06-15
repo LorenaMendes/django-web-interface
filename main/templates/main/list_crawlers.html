@@ -20,6 +20,7 @@ Home
                     <th scope="col">Created at</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
+                    <th scope="col">Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,8 +31,9 @@ Home
                     <td>{{crawler.creation_date }}</td>
                     <td>Running</td>
                     <td><button class="btn btn-success" onclick="runScript('{{ crawler.id }}')">Run</button>
-                        <!-- <button class="btn btn-danger">Stop</button> -->
+                        <button class="btn btn-danger">Stop</button>
                     </td>
+                    <td><a class="btn btn-secondary" href="{% url 'delete_crawler' crawler.id %}">Delete</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
