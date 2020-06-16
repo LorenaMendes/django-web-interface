@@ -1,4 +1,5 @@
 import scrapy
+from scrapy.exceptions import CloseSpider
 
 import requests
 import logging
@@ -9,6 +10,8 @@ import random
 import datetime
 import hashlib
 import time
+
+from crawlers.constants import *
 
 class BaseSpider(scrapy.Spider):
     name = 'base_spider'
@@ -22,14 +25,14 @@ class BaseSpider(scrapy.Spider):
         self.last_flag_check = int(time.time())
         self.stop_flag = False
 
-        with open(f"main/src/config/{crawler_id}_config.json", "r") as f:
+        with open(f"{CURR_FOLDER_FROM_ROOT}/config/{crawler_id}.json", "r") as f:
             self.config = json.loads(f.read())
 
         folders = [
-            f"data/{crawler_id}",
-            f"data/{crawler_id}/raw_pages",
-            f"data/{crawler_id}/csv",
-            f"data/{crawler_id}/files",
+            f"{CURR_FOLDER_FROM_ROOT}/data/{crawler_id}",
+            f"{CURR_FOLDER_FROM_ROOT}/data/{crawler_id}/raw_pages",
+            f"{CURR_FOLDER_FROM_ROOT}/data/{crawler_id}/csv",
+            f"{CURR_FOLDER_FROM_ROOT}/data/{crawler_id}/files",
         ]
         for f in folders:
             try:
@@ -37,7 +40,7 @@ class BaseSpider(scrapy.Spider):
             except FileExistsError:
                 pass
         
-        with open(f"main/src/data/{crawler_id}/files/file_description.txt", "a+") as f:
+        with open(f"{CURR_FOLDER_FROM_ROOT}/data/{crawler_id}/files/file_description.txt", "a+") as f:
             pass
 
     def start_requests(self):
@@ -65,9 +68,12 @@ class BaseSpider(scrapy.Spider):
             return self.stop_flag
 
         self.last_flag_check = now
-        with open(f"main/src/flags/{self.crawler_id}.json") as f:
+        with open(f"{CURR_FOLDER_FROM_ROOT}/flags/{self.crawler_id}.json") as f:
             flags = json.loads(f.read())
         self.stop_flag = flags["stop"]
+
+        if self.stop_flag:
+            raise CloseSpider("Received signal to stop.")
 
         return self.stop_flag
 
@@ -89,10 +95,10 @@ class BaseSpider(scrapy.Spider):
             "crawled_at_date": str(datetime.datetime.today()),
         }
 
-        with open(f"main/src/data/{self.crawler_id}/files/{hsh}.{file_format}", "wb") as f:
+        with open(f"{CURR_FOLDER_FROM_ROOT}/data/{self.crawler_id}/files/{hsh}.{file_format}", "wb") as f:
             f.write(response.body)
 
-        with open(f"main/src/data/{self.crawler_id}/files/file_description.txt", "a+") as f:
+        with open(f"{CURR_FOLDER_FROM_ROOT}/data/{self.crawler_id}/files/file_description.txt", "a+") as f:
             f.write(json.dumps(content) + '\n')
 
     def extract_and_store_csv(self, response):
@@ -113,5 +119,5 @@ class BaseSpider(scrapy.Spider):
             "html": str(response.body),
         }
 
-        with open(f"main/src/data/{self.crawler_id}/raw_pages/{self.hash(response.url)}.json", "w+") as f:
+        with open(f"{CURR_FOLDER_FROM_ROOT}/data/{self.crawler_id}/raw_pages/{self.hash(response.url)}.json", "w+") as f:
             f.write(json.dumps(content, indent=2))

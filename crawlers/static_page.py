@@ -2,7 +2,7 @@ import scrapy
 from scrapy.crawler import CrawlerProcess
 from scrapy.linkextractors import LinkExtractor
 
-from main.src.base_spider import BaseSpider
+from crawlers.base_spider import BaseSpider
 
 import requests
 import logging
@@ -49,37 +49,45 @@ class StaticPageSpider(BaseSpider):
         Parse responses of static pages.
         Will try to follow links if config["explor_links"] is set.
         """
-        # self.logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>> {response.url}")
-        self.logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> {response.headers['Content-type']}")
-        
+        print(response.url, response.headers['Content-type'])
+
+        if self.stop():
+            return
+
         self.extract_and_store_csv(response)
 
         if response.headers['Content-type'] == b'text/html':
             self.store_html(response)
 
             if self.config["explore_links"]:
-                # self.logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>> {self.config['link_extractor']}")
-                # if_present = lambda key, default: key if key in self.config["link_extractor"] else default
+                def get_link_config(key, default):
+                    key = "explore_links_" + key
+                    if key in self.config:
+                        return self.config[key]
+                    return default
+
+                if_present = lambda key, default: self.config[key] if key in self.config else default
                 links_extractor = LinkExtractor(
-                    # # TODO: cant make regex tested on https://regexr.com/ to work here for some reason
-                    # # allow=if_present("allow", ())
-                    # deny=if_present("deny", ()),
-                    # allow_domains=if_present("allow_domains", ()),
-                    # deny_domains=if_present("deny_domains", ()),
-                    # # Note here: changed the default value. It would ignore all links with extensions
-                    # deny_extensions=if_present("deny_extensions", []), 
-                    # restrict_xpaths=if_present("restrict_xpaths", ()),
-                    # restrict_css=if_present("restrict_css", ()),
-                    # tags=if_present("tags", 'a'),
-                    # attrs=if_present("attrs", 'href'),
-                    # canonicalize=if_present("canonicalize", False),
-                    # unique=if_present("unique", True),
-                    # process_value=if_present("process_value", None),
-                    # strip=if_present("strip", True) 
+                    # TODO: cant make regex tested on https://regexr.com/ work here for some reason
+                    # allow=get_link_config("allow", ())
+                    deny=get_link_config("deny", ()),
+                    allow_domains=get_link_config("allow_domains", ()),
+                    deny_domains=get_link_config("deny_domains", ()),
+                    # Note here: changed the default value. It would ignore all links with extensions
+                    deny_extensions=get_link_config("deny_extensions", []), 
+                    restrict_xpaths=get_link_config("restrict_xpaths", ()),
+                    restrict_css=get_link_config("restrict_css", ()),
+                    tags=get_link_config("tags", 'a'),
+                    attrs=get_link_config("attrs", 'href'),
+                    canonicalize=get_link_config("canonicalize", False),
+                    unique=get_link_config("unique", True),
+                    process_value=get_link_config("process_value", None),
+                    strip=get_link_config("strip", True) 
                 )
 
                 # As I could not make the allow parameter work, the code check the regex on the urls here
                 for url in links_extractor.extract_links(response):
+                    print(url.url)
                     match = False
                     if self.config["link_extractor_allow"] != "":
                         # for pattern in self.config["link_extractor_allow"]:
@@ -90,8 +98,10 @@ class StaticPageSpider(BaseSpider):
                         match = True
                     
                     if match:
-                        # self.logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> would call: {url.url}")
+                        print("calling")
                         yield scrapy.Request(url=url.url, callback=self.parse)
+                    else:
+                        print("ignoring")
                 # Fixing the allow parameter, just change the code above by the code commented below
                 # for url in links_extractor.extract_links(response):
                 #     yield scrapy.Request(url=url.url, callback=self.parse)
