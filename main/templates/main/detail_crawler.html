@@ -1,0 +1,33 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<div class="container" id="body-row">
+    <div class="row"></div>
+    <div class="row"></div>
+    <div class="row"></div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                <p>Source name: <strong>{{ crawler.source_name }}</strong></p>
+                <p>Base URL: <strong>{{ crawler.base_url }}</strong></p>
+                <p>Creation date: <strong>{{ crawler.creation_date }}</strong></p>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <button class="btn btn-success" onclick="runScript('{{ crawler.id }}')">Run</button>
+    <button class="btn btn-danger">Stop</button>
+    <a class="btn btn-secondary" href="{% url 'delete_crawler' crawler.id %}">Delete</a>
+</div>
+{% endblock %}

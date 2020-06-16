@@ -18,9 +18,8 @@ Home
                     <th scope="col">Source Name</th>
                     <th scope="col">Base URL</th>
                     <th scope="col">Created at</th>
+                    <th scope="col">Detail</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Action</th>
-                    <th scope="col">Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,11 +28,8 @@ Home
                     <td>{{crawler.source_name }}</td>
                     <td>{{crawler.base_url }}</td>
                     <td>{{crawler.creation_date }}</td>
+                    <td><a class="btn btn-info" href="{% url 'detail_crawler' crawler.id %}">Detail</a></td>
                     <td>Running</td>
-                    <td><button class="btn btn-success" onclick="runScript('{{ crawler.id }}')">Run</button>
-                        <button class="btn btn-danger">Stop</button>
-                    </td>
-                    <td><a class="btn btn-secondary" href="{% url 'delete_crawler' crawler.id %}">Delete</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from .forms import CrawlRequestForm, RawCrawlRequestForm
 from .models import CrawlRequest
-from .src.crawler_manager import start_crawler
+# from .src.crawler_manager import start_crawler
 
 def getAllData():
     return CrawlRequest.objects.all().order_by('-creation_date')
@@ -37,6 +37,16 @@ def delete_crawler(request, id):
     
     return render(request, 'main/confirm_delete_modal.html', {'crawler': crawler})
 
+def detail_crawler(request, id):
+    crawler = CrawlRequest.objects.get(id=id)
+    print("***************")
+    print(crawler)
+    
+    # if request.method == 'POST':
+        
+    #     return HttpResponseRedirect('http://localhost:8000/crawlers/')
+    
+    return render(request, 'main/detail_crawler.html', {'crawler': crawler})
 
 def monitoring(response):
     return HttpResponseRedirect("http://localhost:5000/")
@@ -46,13 +56,13 @@ def create_steps(response):
 
 def manage_crawl(response, instance_id):
     
-    data = CrawlRequest.objects.filter(id=instance_id).values()[0]
-    del data['creation_date']
-    del data['last_modified']
+    # data = CrawlRequest.objects.filter(id=instance_id).values()[0]
+    # del data['creation_date']
+    # del data['last_modified']
 
-    command, instance_id = start_crawler(data)
+    # command, instance_id = start_crawler(data)
 
-    print("*******************")
-    print(command)
-    print("*******************")
+    # print("*******************")
+    # print(command)
+    # print("*******************")
     return render(response, "main/list_crawlers.html", {})
