@@ -61,22 +61,22 @@ def start_crawler(config):
     crawler_id = gen_key()
     print(os.getcwd())
     
-    with open(f"{CURR_FOLDER_FROM_ROOT}/config/{crawler_id}.json", "w+") as f:
-        f.write(json.dumps(config, indent=2))
+    # with open(f"{CURR_FOLDER_FROM_ROOT}/config/{crawler_id}.json", "w+") as f:
+    #     f.write(json.dumps(config, indent=2))
     
-    with open(f"{CURR_FOLDER_FROM_ROOT}/flags/{crawler_id}.json", "w+") as f:
-        f.write(json.dumps({"stop": False}))
+    # with open(f"{CURR_FOLDER_FROM_ROOT}/flags/{crawler_id}.json", "w+") as f:
+    #     f.write(json.dumps({"stop": False}))
 
     # starts new process
-    p = Process(target=crawler_process, args=(crawler_id, config))
-    p.start()
+    # p = Process(target=crawler_process, args=(crawler_id, config))
+    # p.start()
 
     return crawler_id
 
 def stop_crawler(crawler_id):
     """Sets the flags of a crawler to stop."""
-    with open(f"{CURR_FOLDER_FROM_ROOT}/flags/{crawler_id}.json", "w+") as f:
-        f.write(json.dumps({"stop": True}))
+    # with open(f"{CURR_FOLDER_FROM_ROOT}/flags/{crawler_id}.json", "w+") as f:
+    #     f.write(json.dumps({"stop": True}))
 
 def remove_crawler(crawler_id, are_you_sure=False):
     """

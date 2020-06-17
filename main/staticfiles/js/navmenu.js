@@ -250,9 +250,21 @@ function detailCrawlerType(){
 
 function runScript(id) {
     $.ajax({
-        url: 'manage_crawl/' + id, //The URL you defined in urls.py
+        url: '../manage_crawl/' + id, //The URL you defined in urls.py
         success: function(data) {
           //If you wish you can do additional data manipulation here.
+          
+        }
+
+    });
+}
+
+function runDelete(id) {
+    $.ajax({
+        url: '../../delete/' + id, //The URL you defined in urls.py
+        success: function(data) {
+          //If you wish you can do additional data manipulation here.
+          
         }
 
     });

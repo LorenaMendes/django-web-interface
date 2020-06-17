@@ -25,9 +25,19 @@ Home
             </tr>
         </tbody>
     </table>
+    {% if obj %}
+    <p>A INSTÂNCIA DESSE COLETOR ACABA DE SER CRIADA</p>
+    <p>AGORA POSSO MOSTRAR DETALHES DELA E, INCLUSIVE COLOCAR O BOTÃO DE START DESABILITADO</p>
+    {% endif %}
     
-    <button class="btn btn-success" onclick="runScript('{{ crawler.id }}')">Run</button>
-    <button class="btn btn-danger">Stop</button>
-    <a class="btn btn-secondary" href="{% url 'delete_crawler' crawler.id %}">Delete</a>
+    {% if obj %}
+        <a class="btn btn-success">Run disabled</a>
+        <a class="btn btn-danger">Stop</a>
+    {% else %}
+        <a class="btn btn-success" href="{% url 'manage_crawl' crawler.id %}">Run</a>
+        <a class="btn btn-danger">Stop disabled</a>
+        {% endif %}
+    <a class="btn btn-success" href="{% url 'delete_crawler' crawler.id %}">Delete</a>
+
 </div>
 {% endblock %}

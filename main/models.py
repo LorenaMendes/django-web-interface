@@ -85,3 +85,11 @@ class CrawlRequest(TimeStamped):
 
     def __str__(self):
         return self.source_name
+
+class CrawlerInstance(TimeStamped):
+    crawler_id = models.ForeignKey(CrawlRequest, on_delete=models.CASCADE)
+    instance_id = models.BigIntegerField(primary_key=True)
+    running = models.BooleanField()
+
+    def __str__(self):
+        return self.crawler_id
