@@ -91,6 +91,9 @@ function defineValid(section, subsection1 = '', subsection2 = ''){
             }
             defineIcon(section, isValid);
             break;
+        case 'crawler-type':
+            defineIcon(section, document.getElementById("id_link_extractor_max_depht").value.length > 0);
+            break;
     }
 
 }
@@ -164,6 +167,9 @@ $(document).ready(function() {
                 break;
             case 'webdriver_path':
                 defineValid('captcha');
+                break;
+            case 'link_extractor_max_depht':
+                defineValid('crawler-type');
                 break;
 
         }
@@ -248,24 +254,3 @@ function detailCrawlerType(){
     defineValid('crawler_type', crawler_type);
 }
 
-function runScript(id) {
-    $.ajax({
-        url: '../manage_crawl/' + id, //The URL you defined in urls.py
-        success: function(data) {
-          //If you wish you can do additional data manipulation here.
-          
-        }
-
-    });
-}
-
-function runDelete(id) {
-    $.ajax({
-        url: '../../delete/' + id, //The URL you defined in urls.py
-        success: function(data) {
-          //If you wish you can do additional data manipulation here.
-          
-        }
-
-    });
-}

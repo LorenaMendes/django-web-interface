@@ -31,13 +31,13 @@ Home
     {% endif %}
     
     {% if obj %}
-        <a class="btn btn-success">Run disabled</a>
+        <a class="btn btn-success disabled">Run</a>
         <a class="btn btn-danger">Stop</a>
     {% else %}
         <a class="btn btn-success" href="{% url 'manage_crawl' crawler.id %}">Run</a>
-        <a class="btn btn-danger">Stop disabled</a>
+        <a class="btn btn-danger disabled">Stop</a>
         {% endif %}
-    <a class="btn btn-success" href="{% url 'delete_crawler' crawler.id %}">Delete</a>
+    <a class="btn btn-secondary" href="{% url 'delete_crawler' crawler.id %}">Delete</a>
 
 </div>
 {% endblock %}

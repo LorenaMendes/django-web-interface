@@ -59,8 +59,9 @@ def create_steps(response):
     return render(response, "main/steps_creation.html", {})
 
 def manage_crawl(response, instance_id):
-    data = CrawlRequest.objects.filter(id=instance_id).values()[0]
     full_data = CrawlRequest.objects.filter(id=instance_id).values()[0]
+    
+    data = CrawlRequest.objects.filter(id=instance_id).values()[0]
     del data['creation_date']
     del data['last_modified']
     instance_id = crawler_manager.start_crawler(data)
