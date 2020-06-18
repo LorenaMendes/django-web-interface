@@ -9,5 +9,6 @@ urlpatterns = [
     path("detail/<int:id>/", views.detail_crawler, name="detail_crawler"),
     path("crawlers/steps/", views.create_steps, name="create_steps"),
     path("monitoring/", views.monitoring, name="monitoring"),
-    path("detail/manage_crawl/<int:instance_id>", views.manage_crawl, name="manage_crawl"),
+    path("detail/run_crawl/<int:crawler_id>", views.run_crawl, name="run_crawl"),
+    path("detail/stop_crawl/<int:crawler_id>/<int:instance_id>", views.stop_crawl, name="stop_crawl"),
 ]
