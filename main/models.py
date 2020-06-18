@@ -16,6 +16,7 @@ class TimeStamped(models.Model):
         abstract = True
 
 class CrawlRequest(TimeStamped):
+    running = models.BooleanField(default=False)
     source_name = models.CharField(max_length=200)
     base_url  = models.CharField(max_length=200)
     obey_robots = models.BooleanField(blank=True, null=True)
@@ -90,6 +91,3 @@ class CrawlerInstance(TimeStamped):
     crawler_id = models.ForeignKey(CrawlRequest, on_delete=models.CASCADE)
     instance_id = models.BigIntegerField(primary_key=True)
     running = models.BooleanField()
-
-    def __str__(self):
-        return self.crawler_id
