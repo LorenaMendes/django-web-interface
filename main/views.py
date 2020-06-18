@@ -20,13 +20,9 @@ def create_crawler(response):
         my_form = RawCrawlRequestForm(response.POST)
         if my_form.is_valid():
             new_crawl = CrawlRequestForm(my_form.cleaned_data)
-            print("************")
-            print(new_crawl)
-            print("************")
             new_crawl.save()
             
             return HttpResponseRedirect('http://localhost:8000/crawlers/')
-            # return render(response, "main/list_crawlers.html", context)
     else:
         my_form = RawCrawlRequestForm()
     context['form'] = my_form
@@ -34,10 +30,8 @@ def create_crawler(response):
 
 def delete_crawler(request, id):
     crawler = CrawlRequest.objects.get(id=id)
-    print("OI1")
     
     if request.method == 'POST':
-        print("OI2")
         crawler.delete()
         return HttpResponseRedirect('http://localhost:8000/crawlers/')
     
@@ -45,12 +39,10 @@ def delete_crawler(request, id):
 
 def detail_crawler(request, id):
     crawler = CrawlRequest.objects.get(id=id)
+    instances = CrawlerInstance.objects.filter(crawler_id=id)
     
-    # if request.method == 'POST':
-        
-    #     return HttpResponseRedirect('http://localhost:8000/crawlers/')
-    
-    return render(request, 'main/detail_crawler.html', {'crawler': crawler})
+    context = {'crawler': crawler, 'instance': instances[0]}
+    return render(request, 'main/detail_crawler.html', context)
 
 def monitoring(response):
     return HttpResponseRedirect("http://localhost:5000/")
@@ -58,16 +50,32 @@ def monitoring(response):
 def create_steps(response):
     return render(response, "main/steps_creation.html", {})
 
-def manage_crawl(response, instance_id):
-    full_data = CrawlRequest.objects.filter(id=instance_id).values()[0]
+def stop_crawl(response, crawler_id, instance_id):
+    crawler_manager.stop_crawler(instance_id)
     
-    data = CrawlRequest.objects.filter(id=instance_id).values()[0]
+    instance = CrawlerInstance.objects.get(instance_id=instance_id)
+    instance.running = False
+    instance.save()
+    
+    crawler = CrawlRequest.objects.filter(id=crawler_id)[0]
+    crawler.running = False
+    crawler.save()
+    context = {'instance':instance, 'crawler':crawler}
+    return render(response, "main/detail_crawler.html", context)
+
+
+def run_crawl(response, crawler_id):
+    crawler = CrawlRequest.objects.filter(id=crawler_id)[0]
+    crawler.running = True
+    crawler.save()
+    
+    data = CrawlRequest.objects.filter(id=crawler_id).values()[0]
     del data['creation_date']
     del data['last_modified']
     instance_id = crawler_manager.start_crawler(data)
     
-    obj = create_instance(data['id'], instance_id)
-    context = {'obj':obj, 'crawler':full_data}
+    instance = create_instance(data['id'], instance_id)
+    context = {'instance':instance, 'crawler':crawler}
     return render(response, "main/detail_crawler.html", context)
 
 def create_instance(crawler_id, instance_id):
