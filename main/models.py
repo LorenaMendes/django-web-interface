@@ -83,6 +83,7 @@ class CrawlRequest(TimeStamped):
     explore_links = models.BooleanField(blank=True, null=True)
     link_extractor_max_depht = models.IntegerField(blank=True, null=True)
     link_extractor_allow = models.CharField(max_length=1000, blank=True, null=True)
+    link_extractor_allow_extensions = models.CharField(blank=True, null=True, max_length=2000)
 
     def __str__(self):
         return self.source_name

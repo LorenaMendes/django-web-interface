@@ -33,9 +33,13 @@ class CrawlRequestForm(forms.ModelForm):
 
         # Crawler type
         crawler_type = forms.CharField(required=False)
+
+        # Crawler type - Static
         explore_links = forms.BooleanField(required=False)
         link_extractor_max_depht = forms.IntegerField(required=False)
         link_extractor_allow = forms.CharField(required=False)
+        # link_extractor_allow_domains = 
+        link_extractor_allow_extensions = forms.CharField(required=False)
 
         fields = [
             'source_name',
@@ -61,6 +65,7 @@ class CrawlRequestForm(forms.ModelForm):
             'explore_links',
             'link_extractor_max_depht',
             'link_extractor_allow',
+            'link_extractor_allow_extensions',
         ]
 
 class RawCrawlRequestForm(forms.Form):
@@ -71,66 +76,102 @@ class RawCrawlRequestForm(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': 'www.example.com/data/'})
     )
     obey_robots = forms.BooleanField(required=False, label="Obey robots.txt")
-    antiblock = forms.ChoiceField(choices = (
-        ('none', 'None'),
-        ('ip', 'IP rotation'),
-        ('user_agent', 'User-agent rotation'),
-        ('delay', 'Delays'),
-        ('cookies', 'Use cookies'),
-    ), widget=forms.Select(attrs={'onchange': 'detailAntiblock();'}))
-    captcha = forms.ChoiceField(choices = (
-        ('none', 'None'), 
-        ('image', 'Image'),
-        ('sound', 'Sound'),
-    ), widget=forms.Select(attrs={'onchange': 'detailCaptcha();'}))
+    antiblock = forms.ChoiceField(
+        choices = (
+            ('none', 'None'),
+            ('ip', 'IP rotation'),
+            ('user_agent', 'User-agent rotation'),
+            ('delay', 'Delays'),
+            ('cookies', 'Use cookies'),
+        ),
+        widget=forms.Select(attrs={'onchange': 'detailAntiblock();'})
+    )
+    captcha = forms.ChoiceField(
+        choices = (
+            ('none', 'None'), 
+            ('image', 'Image'),
+            ('sound', 'Sound'),
+        ),
+        widget=forms.Select(attrs={'onchange': 'detailCaptcha();'})
+    )
     
     # Options for IP rotation
-    ip_type = forms.ChoiceField(required=False, choices = (
-        ('tor', 'Tor'), 
-        ('proxy', 'Proxy'),
-    ), widget=forms.Select(attrs={'onchange': 'detailIpRotationType();'}))
-    proxy_list = forms.CharField(required=False, max_length=2000, label="Proxy List",
-        widget=forms.TextInput(attrs={'placeholder': 'Paste here the content of your proxy list file'}))
+    ip_type = forms.ChoiceField(
+        required=False, choices = (
+            ('tor', 'Tor'), 
+            ('proxy', 'Proxy'),
+        ),
+        widget=forms.Select(attrs={'onchange': 'detailIpRotationType();'})
+    )
+    proxy_list = forms.CharField(
+        required=False, max_length=2000, label="Proxy List",
+        widget=forms.TextInput(attrs={'placeholder': 'Paste here the content of your proxy list file'})
+    )
     max_reqs_per_ip = forms.IntegerField(required=False, label="Max Requisitions per IP")
     max_reuse_rounds = forms.IntegerField(required=False, label="Max Reuse Rounds")
     
     # Options for User Agent rotation
     reqs_per_user_agent = forms.IntegerField(required=False, label="Requests per User Agent")
-    user_agents_file = forms.CharField(required=False, max_length=2000, label="User Agents File",
-        widget=forms.TextInput(attrs={'placeholder': 'Paste here the content of your user agents file'}))
+    user_agents_file = forms.CharField(
+        required=False, max_length=2000, label="User Agents File",
+        widget=forms.TextInput(attrs={'placeholder': 'Paste here the content of your user agents file'})
+    )
     delay_secs = forms.IntegerField(required=False, label="Delay in Seconds")
 
     # Options for Delay
     delay_secs = forms.IntegerField(required=False, label="Delay in Seconds")
-    delay_type = forms.ChoiceField(required=False, choices = (
-        ('random', 'Random'), 
-        ('fixed', 'Fixed'),
-    ))
+    delay_type = forms.ChoiceField(
+        required=False, choices = (
+            ('random', 'Random'), 
+            ('fixed', 'Fixed'),
+        )
+    )
 
     # Options for Cookies
-    cookies_file = forms.CharField(required=False, max_length=2000, label="Cookies File",
-        widget=forms.TextInput(attrs={'placeholder': 'Paste here the content of your cookies file'}))
+    cookies_file = forms.CharField(
+        required=False, max_length=2000, label="Cookies File",
+        widget=forms.TextInput(attrs={'placeholder': 'Paste here the content of your cookies file'})
+    )
     persist_cookies = forms.BooleanField(required=False, label="Persist Cookies")
     
     # Options for Captcha
-    has_webdriver = forms.BooleanField(required=False, label="Use webdriver",
-        widget = forms.CheckboxInput(attrs={'onchange': 'detailWebdriverType(); defineValid("captcha")'}))
-    webdriver_path = forms.CharField(required=False, max_length=2000, label="Download directory",
+    has_webdriver = forms.BooleanField(
+        required=False, label="Use webdriver",
+        widget = forms.CheckboxInput(attrs={'onchange': 'detailWebdriverType(); defineValid("captcha")'})
+    )
+    webdriver_path = forms.CharField(
+        required=False, max_length=2000, label="Download directory",
         widget=forms.TextInput(attrs={'placeholder': 'Download directory path'}))
-    img_xpath = forms.CharField(required=False, label="Image Xpath", max_length=100,
+    img_xpath = forms.CharField(
+        required=False, label="Image Xpath", max_length=100,
         widget=forms.TextInput(attrs={'placeholder': 'Image Xpath'})
     )
-    sound_xpath = forms.CharField(required=False, label="Sound Xpath", max_length=100,
+    sound_xpath = forms.CharField(
+        required=False, label="Sound Xpath", max_length=100,
         widget=forms.TextInput(attrs={'placeholder': 'Sound Xpath'})
     )
     
-    crawler_type = forms.ChoiceField(required=False, choices = (
-        ('static_page', 'Static Page'), 
-        ('form_page', 'Page with Form'),
-        ('single_file', 'Single File'),
-        ('bundle_file', 'Bundle File'),
-    ), widget=forms.Select(attrs={'onchange': 'detailCrawlerType();'}))
+    # Crawler Type
+    crawler_type = forms.ChoiceField(
+        required=False, choices = (
+            ('static_page', 'Static Page'), 
+            ('form_page', 'Page with Form'),
+            ('single_file', 'Single File'),
+            ('bundle_file', 'Bundle File'),
+        ),
+        widget=forms.Select(attrs={'onchange': 'detailCrawlerType();'})
+    )
     explore_links = forms.BooleanField(required=False, label="Explore links")
-    link_extractor_max_depht = forms.IntegerField(required=False, label="Link extractor max depth")
-    link_extractor_allow = forms.CharField(required=False, max_length=2000, label="Link extractor allow",
-        widget=forms.TextInput(attrs={'placeholder': 'Regex for allowing on link extractor'}))
+
+    # Crawler Type - Static
+    link_extractor_max_depht = forms.IntegerField(
+        required=False, label="Link extractor max depth (blank to not limit):"
+    )
+    link_extractor_allow = forms.CharField(
+        required=False, max_length=2000, label="Allow urls that match with the regex (blank to not filter):",
+        widget=forms.TextInput(attrs={'placeholder': 'Regex for allowing urls'})
+    )
+    link_extractor_allow_extensions = forms.CharField(
+        required=False, max_length=2000, label="List of allowed extensions (comma separed):",
+        widget=forms.TextInput(attrs={'placeholder': 'pdf,xml'})
+    )
