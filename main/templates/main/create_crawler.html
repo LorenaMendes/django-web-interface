@@ -74,7 +74,7 @@ New Crawler
                         <span class="menu-collapsed">Crawler Type</span>
                     </div>
                     <div class="col-md-2">
-                        <span id="crawler-type-valid-icon" class="fa fa-warning fa-fw mr-3 crawler-type-valid-icon valid-icon"></span>
+                        <span id="crawler-type-valid-icon" class="fa fa-check fa-fw mr-3 crawler-type-valid-icon valid-icon"></span>
                     </div>
                 </div>
             </a>
@@ -183,6 +183,7 @@ New Crawler
                                     {{ form.explore_links | as_crispy_field}}
                                     {{ form.link_extractor_max_depht | as_crispy_field}}
                                     {{ form.link_extractor_allow | as_crispy_field}}
+                                    {{ form.link_extractor_allow_extensions | as_crispy_field}}
                                 </div>
                                 <div class="content-div" id="form_page" hidden></div>
                                 <div class="content-div" id="single_file" hidden></div>

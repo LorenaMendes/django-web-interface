@@ -92,7 +92,10 @@ function defineValid(section, subsection1 = '', subsection2 = ''){
             defineIcon(section, isValid);
             break;
         case 'crawler-type':
-            defineIcon(section, document.getElementById("id_link_extractor_max_depht").value.length > 0);
+            // value = document.getElementById("id_link_extractor_max_depht").value
+            // console.log(value)
+            // defineIcon(section, value.lenght > 0 | int(value) >= 0); // TODO: check not working
+            defineIcon(section, true);
             break;
     }
 
