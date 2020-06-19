@@ -64,7 +64,7 @@ class StaticPageSpider(BaseSpider):
                 if self.config[f"{pfx}allow_extensions"] != "":
                     allowed_extensions = self.config[f"{pfx}allow_extensions"].split(",")
                     self.config[f"{pfx}deny_extensions"] = [
-                        i for i in scrapy.linkextractors.IGNORED_EXTENSIONS if i not int allowed_extensions
+                        i for i in scrapy.linkextractors.IGNORED_EXTENSIONS if i not in allowed_extensions
                     ]
 
                 def get_link_config(key, default):

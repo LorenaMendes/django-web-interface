@@ -68,8 +68,8 @@ def start_crawler(config):
         f.write(json.dumps({"stop": False}))
 
     # starts new process
-    # p = Process(target=crawler_process, args=(crawler_id, config))
-    # p.start()
+    p = Process(target=crawler_process, args=(crawler_id, config))
+    p.start()
 
     return crawler_id
 

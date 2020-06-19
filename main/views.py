@@ -41,7 +41,7 @@ def detail_crawler(request, id):
     crawler = CrawlRequest.objects.get(id=id)
     instances = CrawlerInstance.objects.filter(crawler_id=id)
     
-    context = {'crawler': crawler, 'instance': instances[0]}
+    context = {'crawler': crawler, 'instance': instances[0] if len(instances) > 0 else instances[:1]}
     return render(request, 'main/detail_crawler.html', context)
 
 def monitoring(response):
