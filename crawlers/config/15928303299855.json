@@ -1,8 +1,8 @@
 {
-  "id": 23,
+  "id": 25,
   "running": true,
-  "source_name": "Teste1",
-  "base_url": "https://saolourenco.mg.gov.br/poficiais.php",
+  "source_name": "demo2",
+  "base_url": "https://www.saolourenco.mg.gov.br/poficiais.php",
   "obey_robots": false,
   "antiblock": "none",
   "ip_type": "tor",

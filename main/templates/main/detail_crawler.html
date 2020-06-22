@@ -27,16 +27,16 @@ Home
     </table>
 
     {% if crawler.running == True %}
-        <p>Tá running</p>
+        <!-- <p>Tá running</p> -->
         <a class="btn btn-success disabled">Run</a>
         <a class="btn btn-danger" href="{% url 'stop_crawl' crawler_id=crawler.id instance_id=instance.instance_id %}">Stop</a>
     {% elif crawler.running == False %}
-        <p>Não tá running</p>
+        <!-- <p>Não tá running</p> -->
         <a class="btn btn-success" href="{% url 'run_crawl' crawler.id %}">Run</a>
         <a class="btn btn-danger disabled">Stop</a>
         
     {% else %}
-        <p>Não tem recebi instance no dicionário</p>
+        <!-- <p>Não tem recebi instance no dicionário</p> -->
         <a class="btn btn-success" href="{% url 'run_crawl' crawler.id %}">Run</a>
         <a class="btn btn-danger disabled">Stop</a>
     {% endif %}
