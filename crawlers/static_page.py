@@ -59,21 +59,24 @@ class StaticPageSpider(BaseSpider):
         if response.headers['Content-type'] == b'text/html':
             self.store_html(response)
 
-            if self.config["explore_links"]:
+            if "explore_links" in self.config and self.config["explore_links"]:
                 pfx = "link_extractor_"
-                if self.config[f"{pfx}allow_extensions"] != "":
-                    allowed_extensions = self.config[f"{pfx}allow_extensions"].split(",")
+
+                # convert allow extensions into deny_extensions
+                allow_extension = f"{pfx}allow_extensions"
+                if allow_extension in self.config and self.config[allow_extension] != "":
+                    allowed_extensions = self.config[allow_extension].split(",")
                     self.config[f"{pfx}deny_extensions"] = [
                         i for i in scrapy.linkextractors.IGNORED_EXTENSIONS if i not in allowed_extensions
                     ]
 
+                # function to get other keys from dictionary
                 def get_link_config(key, default):
                     key = pfx + key
                     if key in self.config:
                         return self.config[key]
                     return default
 
-                if_present = lambda key, default: self.config[key] if key in self.config else default
                 links_extractor = LinkExtractor(
                     # TODO: cant make regex tested on https://regexr.com/ work here for some reason
                     # allow=get_link_config("allow", ())
