@@ -2,3 +2,4 @@
 *.pyc
 *.exe
 *.sqlite3
+db.sqlite3
