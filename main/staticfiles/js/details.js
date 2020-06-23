@@ -1,16 +1,14 @@
 document.addEventListener('DOMContentLoaded',
     function () {
         var crawler_id = document.getElementById("crawler_id").innerText.trim();
-
         var instance_id = document.getElementById("last_instance_id").innerText.trim();
-        if(instance_id == "None")
-            return;
-
         var last_as_running = document.getElementById("instance_running").innerText.trim() == "True";
+        console.log(instance_id != "None" && last_as_running);
 
-        if(last_as_running){
+        if(instance_id != "None" && last_as_running){
             document.getElementById("stderr_tail").innerText = "";
             tail_logs(instance_id);
+            console.log("setting times")
             setTimeout(() => {
                 console.log("last as running. Checking if still running...");
                 var text = document.getElementById("stderr_tail").innerText.trim();
@@ -20,7 +18,7 @@ document.addEventListener('DOMContentLoaded',
                     console.log("10s passed, checking log again...");
                     tail_logs(instance_id);
                     console.log("new log: " + document.getElementById("stderr_tail").innerText.trim());
-                    if (text == document.getElementById("stderr_tail").innerText.trim()) {
+                    if (text === document.getElementById("stderr_tail").innerText.trim()) {
                         console.log("It is not running anymore.");
                         set_instance_to_not_running(crawler_id, instance_id);
                     }
@@ -29,12 +27,12 @@ document.addEventListener('DOMContentLoaded',
                         set_to_running(crawler_id, instance_id);
                         tail_f_logs(instance_id);
                     }
-                }, 5000);
-            }, 5000);
+                }, 60000);
+            }, 30000);
         }
         else{
             set_to_not_running(crawler_id);
-            tail_logs(instance_id);
+            if (instance_id != "None") tail_logs(instance_id);
         }
     },
     false
@@ -91,5 +89,5 @@ function set_to_running(crawler_id, instance_id){
     document.getElementById("run_button").innerHTML = "Run";
     document.getElementById("run_button").classList.add("disabled");
     document.getElementById("stop_button").innerHTML = "Stop";
-    document.getElementById("stop_button").setAttribute("href", "/detail/stop_crawl/", crawler_id, instance_id);
+    document.getElementById("stop_button").setAttribute("href", "/detail/stop_crawl/" + crawler_id + "/" + instance_id);
 }

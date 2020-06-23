@@ -40,10 +40,11 @@ Crawler "{{ crawler.source_name }}"
             {% endif %}
         </div>
         <div class="col" id="instance_running">
-            {{last_instance.running}}
+            {{crawler.running}}
         </div>
     </div>
 
+    {% if last_instance is not None %}
     <!-- Instances table -->
     <div class="row">
         <div class="col">
@@ -72,6 +73,13 @@ Crawler "{{ crawler.source_name }}"
             </table>
         </div>
     </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <h5>No instance created.</h5>
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Run/Stop/Del/Edit Buttons -->
     <div class="row">
