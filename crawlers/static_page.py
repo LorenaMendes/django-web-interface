@@ -17,6 +17,7 @@ class StaticPageSpider(BaseSpider):
     name = 'static_page'    
 
     def start_requests(self):
+        print("TO NA START REQUESTS")
         urls = [self.config["base_url"]]
         # if self.config["url"]["type"] == "simple":
         #     urls = [self.config["url"]["url"]]

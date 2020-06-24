@@ -32,6 +32,7 @@ def get_crawler_base_settings():
 
 def crawler_process(crawler_id, config):
     """Starts crawling."""
+    print("AAAAAAAAAAAA")
     # Redirects process logs to files
     sys.stdout = open(f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}.out", "a", buffering=1)
     sys.stderr = open(f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}_error.out", "a", buffering=1)
@@ -143,4 +144,4 @@ if __name__ == '__main__':
         }
     )
 
-    #config = {"id": 17,"source_name": "Di\u00e1rio Oficial de S\u00e3o Louren\u00e7o","base_url": "https://saolourenco.mg.gov.br/poficiais.php","obey_robots": True,"antiblock": "ip","ip_type": "tor","proxy_list": None,"max_reqs_per_ip": 4,"max_reuse_rounds": 3,"reqs_per_user_agent": None,"user_agents_file": None,"delay_secs": None,"delay_type": "random","cookies_file": None,"persist_cookies": False,"captcha": "none","img_xpath": None,"img_url": None,"sound_xpath": None,"sound_url": None,"crawler_type": "static_page","explore_links": True,"link_extractor_max_depht": 1,"link_extractor_allow": "(^https\\:\\/\\/saolourenco\\.mg\\.gov\\.br\\/poficiais\\.php|^https\\:\\/\\/saolourenco\\.mg\\.gov\\.br\\/arquivos\\/publicacaooficial\\/)"}
+    #config = {"id": 17,"source_name": "Di\u00e1rio Oficial de S\u00e3o Louren\u00e7o","base_url": "https://saolourenco.mg.gov.br/poficiais.php","obey_robots": True,"antiblock": "ip","ip_type": "tor","proxy_list": None,"max_reqs_per_ip": 4,"max_reuse_rounds": 3,"reqs_per_user_agent": None,"user_agents_file": None,"delay_secs": None,"delay_type": "random","cookies_file": None,"persist_cookies": False,"captcha": "none","img_xpath": None,"img_url": None,"sound_xpath": None,"sound_url": None,"crawler_type": "static_page","explore_links": True,"link_extractor_max_depht": 1,"link_extractor_allow": "(^https\\:\\/\\/saolourenco\\.mg\\.gov\\.br\\/poficiais\\.php|^https\\:\\/\\/saolourenco\\.mg\\.gov\\.br\\/arquivos\\/publicacaooficial\\/)", "link_extractor_allow_extensions": "pdf",}
