@@ -85,10 +85,15 @@ New Crawler
                     <span class="menu-collapsed">Some Setup</span>
                 </div>
             </a>
-            <a href="#" class="bg-dark list-group-item list-group-item-action">
+            <a onClick="showBlock(this.id);" href="#" class="button-block bg-dark list-group-item list-group-item-action" id="probing-item">
                 <div class="d-flex w-100 justify-content-start align-items-center">
-                    <span class="fa fa-barcode fa-fw mr-3"></span>
-                    <span class="menu-collapsed">Probing</span>
+                    <div class="col-md-10 sidemenu-items">
+                        <span class="fa fa-id-card-o fa-fw mr-3"></span>
+                        <span class="menu-collapsed">Probing</span>
+                    </div>
+                    <div class="col-md-2">
+                        <span id="probing-valid-icon" class="fa fa-check fa-fw mr-3 probing-valid-icon valid-icon"></span>
+                    </div>
                 </div>
             </a>
             <a href="#" class="bg-dark list-group-item list-group-item-action">
@@ -152,7 +157,7 @@ New Crawler
                             </div>
                         </div>
                     </div>
-
+                    
                     <div id="captcha-item-block" class="block" hidden>
                         <div class="row" style="padding:20px;">
                             <div class="col md-6">
@@ -191,10 +196,49 @@ New Crawler
                             </div>
                         </div>
                     </div>
+                    
+                    <div id="templated-url-item-block" class="block" hidden>
+                        <div class="row" style="padding:20px;">
+                            <div class="col md-6">
+                                {{ form.templated_url_type | as_crispy_field}}
+                                <div class="content-div" id="none" hidden></div>
+                                <div class="content-div" id="get" hidden>
+                                    {{ form.formatable_url | as_crispy_field}}
+                                </div>
+                                <div class="content-div" id="post" hidden>
+                                    {{ form.post_dictionary | as_crispy_field}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="probing-item-block" class="block" hidden>
+                        <div class="row" style="padding:20px;">
+                            <div class="col md-6">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6 mb-0">
+                                      {{ form.http_status_response | as_crispy_field}}
+                                    </div>
+                                    <div class="form-group col-md-6 mb-0">
+                                      {{ form.invert_http_status | as_crispy_field}}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6 mb-0">
+                                      {{ form.text_match_response | as_crispy_field}}
+                                    </div>
+                                    <div class="form-group col-md-6 mb-0">
+                                      {{ form.invert_text_match | as_crispy_field}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </form>
             </div>
         </div>
     </div>
 </div>
-    
-    {% endblock %}
+
+{% endblock %}

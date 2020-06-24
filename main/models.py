@@ -16,12 +16,16 @@ class TimeStamped(models.Model):
         abstract = True
 
 class CrawlRequest(TimeStamped):
+    
     running = models.BooleanField(default=False)
+    
+    # BASIC INFO ####################################################################
     source_name = models.CharField(max_length=200)
     base_url  = models.CharField(max_length=200)
     obey_robots = models.BooleanField(blank=True, null=True)
     
 
+    # ANTIBLOCK #####################################################################
     ANTIBLOCK_TYPE = [
         ('none', 'None'),
         ('ip', 'IP rotation'),
@@ -59,6 +63,7 @@ class CrawlRequest(TimeStamped):
     cookies_file = models.CharField(max_length=2000, blank=True, null=True)
     persist_cookies = models.BooleanField(blank=True, null=True)
 
+    # CAPTCHA #######################################################################
     CAPTCHA_TYPE = [
         ('none', 'None'), 
         ('image', 'Image'),
@@ -73,6 +78,7 @@ class CrawlRequest(TimeStamped):
         # Options for sound
     sound_xpath = models.CharField(max_length=100, blank=True, null=True)
 
+    # CRAWLER TYPE ###################################################################
     CRAWLER_TYPE = [
         ('static_page', 'Static Page'), 
         ('form_page', 'Page with Form'),
@@ -84,6 +90,26 @@ class CrawlRequest(TimeStamped):
     link_extractor_max_depht = models.IntegerField(blank=True, null=True)
     link_extractor_allow = models.CharField(max_length=1000, blank=True, null=True)
     link_extractor_allow_extensions = models.CharField(blank=True, null=True, max_length=2000)
+
+    # TEMPLATED URL ###################################################################
+    TEMPLATED_URL_TYPE = [
+        ('none', 'None'), 
+        ('get', 'GET'), 
+        ('post', 'POST'),
+    ]
+    # GET case
+    templated_url_type = models.CharField(max_length=15, choices=TEMPLATED_URL_TYPE, default='none')
+    formatable_url = models.CharField(max_length=200, blank=True, null=True)
+    param = models.CharField(max_length=200, blank=True, null=True)
+
+    # POST case
+    post_dictionary = models.CharField(max_length=1000, blank=True, null=True)
+
+    # PROBING #########################################################################
+    http_status_response = models.CharField(max_length=15, blank=True, null=True)
+    invert_http_status = models.BooleanField(blank=True, null=True)
+    text_match_response = models.CharField(max_length=2000, blank=True, null=True)
+    invert_text_match = models.BooleanField(blank=True, null=True)
 
     def __str__(self):
         return self.source_name

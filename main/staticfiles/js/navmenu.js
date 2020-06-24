@@ -174,7 +174,6 @@ $(document).ready(function() {
             case 'link_extractor_max_depht':
                 defineValid('crawler-type');
                 break;
-
         }
 
     });
@@ -219,6 +218,18 @@ function detailCaptcha(){
     document.getElementById(captcha_type).hidden = false;
     
     defineValid('captcha', captcha_type);
+}
+
+function detailTemplatedUrlRequestType(){
+    var mainSelect = document.getElementById("id_templated_url_type");
+    const request_type = mainSelect.options[mainSelect.selectedIndex].value;
+    
+    var contents = document.getElementsByClassName("content-div");
+    for (const i in contents)
+        contents[i].hidden = true;
+    document.getElementById(request_type).hidden = false;
+    
+    // defineValid('antiblock', request_type);
 }
 
 function detailIpRotationType(){

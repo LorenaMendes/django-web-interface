@@ -40,6 +40,13 @@ class CrawlRequestForm(forms.ModelForm):
         link_extractor_allow = forms.CharField(required=False)
         # link_extractor_allow_domains = 
         link_extractor_allow_extensions = forms.CharField(required=False)
+        formatable_url = forms.CharField(required=False)
+        post_dictionary = forms.CharField(required=False)
+
+        http_status_response = forms.CharField(required=False)
+        invert_http_status = forms.BooleanField(required=False)
+        text_match_response = forms.CharField(required=False)
+        invert_text_match = forms.BooleanField(required=False)
 
         fields = [
             'source_name',
@@ -66,9 +73,17 @@ class CrawlRequestForm(forms.ModelForm):
             'link_extractor_max_depht',
             'link_extractor_allow',
             'link_extractor_allow_extensions',
+            'templated_url_type',
+            'formatable_url',
+            'post_dictionary',
+            'http_status_response',
+            'invert_http_status',
+            'text_match_response',
+            'invert_text_match',
         ]
 
 class RawCrawlRequestForm(forms.Form):
+    # BASIC INFO #########################################################################
     source_name = forms.CharField(label="Source Name", max_length=200,
         widget=forms.TextInput(attrs={'placeholder': 'Example'})
     )
@@ -76,6 +91,8 @@ class RawCrawlRequestForm(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': 'www.example.com/data/'})
     )
     obey_robots = forms.BooleanField(required=False, label="Obey robots.txt")
+    
+    # ANTIBLOCK ##########################################################################
     antiblock = forms.ChoiceField(
         choices = (
             ('none', 'None'),
@@ -85,14 +102,6 @@ class RawCrawlRequestForm(forms.Form):
             ('cookies', 'Use cookies'),
         ),
         widget=forms.Select(attrs={'onchange': 'detailAntiblock();'})
-    )
-    captcha = forms.ChoiceField(
-        choices = (
-            ('none', 'None'), 
-            ('image', 'Image'),
-            ('sound', 'Sound'),
-        ),
-        widget=forms.Select(attrs={'onchange': 'detailCaptcha();'})
     )
     
     # Options for IP rotation
@@ -134,6 +143,15 @@ class RawCrawlRequestForm(forms.Form):
     )
     persist_cookies = forms.BooleanField(required=False, label="Persist Cookies")
     
+    # CAPTCHA ############################################################################
+    captcha = forms.ChoiceField(
+        choices = (
+            ('none', 'None'), 
+            ('image', 'Image'),
+            ('sound', 'Sound'),
+        ),
+        widget=forms.Select(attrs={'onchange': 'detailCaptcha();'})
+    )
     # Options for Captcha
     has_webdriver = forms.BooleanField(
         required=False, label="Use webdriver",
@@ -151,7 +169,7 @@ class RawCrawlRequestForm(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': 'Sound Xpath'})
     )
     
-    # Crawler Type
+    # CRAWLER TYPE ########################################################################
     crawler_type = forms.ChoiceField(
         required=False, choices = (
             ('static_page', 'Static Page'), 
@@ -175,3 +193,40 @@ class RawCrawlRequestForm(forms.Form):
         required=False, max_length=2000, label="List of allowed extensions (comma separed):",
         widget=forms.TextInput(attrs={'placeholder': 'pdf,xml'})
     )
+    # Crawler Type - Page with form
+    # Crawler Type - Single file
+    # Crawler Type - Bundle file
+
+    # TEMPLATED URL ########################################################################
+    templated_url_type = forms.ChoiceField(
+        required=False, choices = (
+            ('none', 'None'), 
+            ('get', 'GET'), 
+            ('post', 'POST'),
+        ),
+        widget=forms.Select(attrs={'onchange': 'detailTemplatedUrlRequestType();'})
+    )
+    # templated url - GET
+    formatable_url = forms.CharField(
+        required=False, max_length=2000, label="Formatable URL (format: example.com/param={})",
+        widget=forms.TextInput(attrs={'placeholder': 'https://obraspublicas.com/IDOBRA={}'})
+    )
+    # param
+    
+    # templated url - POST
+    post_dictionary = forms.CharField(
+        required=False, max_length=2000, label="Dictionary of post params (format: {'name':value;})",
+        widget=forms.TextInput(attrs={'placeholder': '{\'name1\': value1; \'name2\': value2}'})
+    )
+
+    # PROBING ##############################################################################
+    http_status_response = forms.CharField(
+        required=False, max_length=2000, label="HTTP status response",
+        widget=forms.TextInput(attrs={'placeholder': '200'})
+    )
+    invert_http_status = forms.BooleanField(required=False, label="Opposite")
+    text_match_response = forms.CharField(
+        required=False, max_length=2000, label="Text match response",
+        widget=forms.TextInput(attrs={'placeholder': 'Processo não encontrado'})
+    )
+    invert_text_match = forms.BooleanField(required=False, label="Opposite")

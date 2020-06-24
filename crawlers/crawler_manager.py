@@ -32,6 +32,7 @@ def get_crawler_base_settings():
 
 def crawler_process(crawler_id, config):
     """Starts crawling."""
+    print("AAAAAAAAAAAA")
     # Redirects process logs to files
     sys.stdout = open(f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}.out", "a", buffering=1)
     sys.stderr = open(f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}_error.out", "a", buffering=1)
