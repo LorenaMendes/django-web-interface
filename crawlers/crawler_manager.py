@@ -32,7 +32,6 @@ def get_crawler_base_settings():
 
 def crawler_process(crawler_id, config):
     """Starts crawling."""
-    print("AAAAAAAAAAAA")
     # Redirects process logs to files
     sys.stdout = open(f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}.out", "a", buffering=1)
     sys.stderr = open(f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}_error.out", "a", buffering=1)
@@ -50,6 +49,16 @@ def crawler_process(crawler_id, config):
         raise NotImplementedError
     elif config["crawler_type"] == "static_page":
         process.crawl(StaticPageSpider, crawler_id=crawler_id)
+    
+    def update_database():
+        print(f"Error at: {crawler_id}")
+        # TODO: get port as variable
+        port = 8000
+        requests.get(f'http://localhost:{port}/detail/stop_crawl/{config["id"]}/{crawler_id}')
+
+    for crawler in process.crawlers:
+        crawler.signals.connect(update_database, signal=scrapy.signals.spider_error)
+        crawler.signals.connect(update_database, signal=scrapy.signals.spider_closed)
 
     process.start()
 
