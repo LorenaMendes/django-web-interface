@@ -140,6 +140,7 @@ if __name__ == '__main__':
             "crawler_type": "static_page",
             "explore_links": True,
             "link_extractor_max_depht": 1,
+            "link_extractor_allow_extensions": "pdf",
             "link_extractor_allow": "(^https\\:\\/\\/saolourenco\\.mg\\.gov\\.br\\/poficiais\\.php|^https\\:\\/\\/saolourenco\\.mg\\.gov\\.br\\/arquivos\\/publicacaooficial\\/)"
         }
     )

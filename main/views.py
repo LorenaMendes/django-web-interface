@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 
 from .forms import CrawlRequestForm, RawCrawlRequestForm
 from .models import CrawlRequest, CrawlerInstance
+
+import subprocess
+from datetime import datetime
+import time
 
 import crawlers.crawler_manager as crawler_manager
 
@@ -39,9 +43,15 @@ def delete_crawler(request, id):
 
 def detail_crawler(request, id):
     crawler = CrawlRequest.objects.get(id=id)
-    instances = CrawlerInstance.objects.filter(crawler_id=id)
-    
-    context = {'crawler': crawler, 'instance': instances[0] if len(instances) > 0 else instances[:1]}
+    # order_by("-atribute") orders descending
+    instances = CrawlerInstance.objects.filter(crawler_id=id).order_by("-last_modified")
+
+    context = {
+        'crawler': crawler,
+        'instances': instances,
+        'last_instance': instances[0] if len(instances) else None
+    }
+
     return render(request, 'main/detail_crawler.html', context)
 
 def monitoring(response):
@@ -61,8 +71,8 @@ def stop_crawl(response, crawler_id, instance_id):
     crawler.running = False
     crawler.save()
     context = {'instance':instance, 'crawler':crawler}
-    return render(response, "main/detail_crawler.html", context)
-
+    return redirect(f"/detail/{crawler_id}")
+    # return render(response, "main/detail_crawler.html", context)
 
 def run_crawl(response, crawler_id):
     crawler = CrawlRequest.objects.filter(id=crawler_id)[0]
@@ -76,9 +86,20 @@ def run_crawl(response, crawler_id):
     
     instance = create_instance(data['id'], instance_id)
     context = {'instance':instance, 'crawler':crawler}
-    return render(response, "main/detail_crawler.html", context)
+    
+    return redirect(f"/detail/{crawler_id}")
+    # return render(response, "main/detail_crawler.html", context)
 
 def create_instance(crawler_id, instance_id):
     mother = CrawlRequest.objects.filter(id=crawler_id)
     obj = CrawlerInstance.objects.create(crawler_id=mother[0], instance_id=instance_id, running=True)
     return obj
+
+def tail_log_file(request, instance_id):
+    out = subprocess.run(["tail", f"crawlers/log/{instance_id}.out", "-n", "5"], stdout=subprocess.PIPE).stdout
+    err = subprocess.run(["tail", f"crawlers/log/{instance_id}_error.out", "-n", "5"], stdout=subprocess.PIPE).stdout
+    return JsonResponse({
+        "out": out.decode('utf-8'),
+        "err": err.decode('utf-8'),
+        "time": str(datetime.fromtimestamp(time.time())),
+    })
