@@ -11,8 +11,6 @@ from scrapy.crawler import CrawlerProcess
 
 from crawlers.constants import *
 
-import requests
-
 # from .crawlers.static_page import StaticPageSpider
 # from .crawlers.static_page import StaticPageSpider
 # from .crawlers.static_page import StaticPageSpider
@@ -52,17 +50,15 @@ def crawler_process(crawler_id, config):
     elif config["crawler_type"] == "static_page":
         process.crawl(StaticPageSpider, crawler_id=crawler_id)
     
-    def spider_error():
+    def update_database():
         print(f"Error at: {crawler_id}")
         # TODO: get port as variable
         port = 8000
         requests.get(f'http://localhost:{port}/detail/stop_crawl/{config["id"]}/{crawler_id}')
 
     for crawler in process.crawlers:
-        crawler.signals.connect(
-            spider_error,
-            signal=scrapy.signals.spider_error
-        )
+        crawler.signals.connect(update_database, signal=scrapy.signals.spider_error)
+        crawler.signals.connect(update_database, signal=scrapy.signals.spider_closed)
 
     process.start()
 
