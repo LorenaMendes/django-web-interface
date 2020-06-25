@@ -97,7 +97,7 @@ def create_instance(crawler_id, instance_id):
 
 def tail_log_file(request, instance_id):
     out = subprocess.run(["tail", f"crawlers/log/{instance_id}.out", "-n", "10"], stdout=subprocess.PIPE).stdout
-    err = subprocess.run(["tail", f"crawlers/log/{instance_id}_error.out", "-n", "10"], stdout=subprocess.PIPE).stdout
+    err = subprocess.run(["tail", f"crawlers/log/{instance_id}.err", "-n", "10"], stdout=subprocess.PIPE).stdout
     return JsonResponse({
         "out": out.decode('utf-8'),
         "err": err.decode('utf-8'),
