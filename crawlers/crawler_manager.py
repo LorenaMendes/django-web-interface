@@ -15,6 +15,7 @@ from crawlers.constants import *
 # from .crawlers.static_page import StaticPageSpider
 # from .crawlers.static_page import StaticPageSpider
 from crawlers.static_page import StaticPageSpider
+import requests
 
 def get_crawler_base_settings():
     """Returns scrapy base configurations."""
