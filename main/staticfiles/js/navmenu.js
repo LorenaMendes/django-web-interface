@@ -212,7 +212,7 @@ function detailCaptcha(){
     
     document.getElementById('webdriver').hidden = captcha_type == 'none' ? true : false;
 
-    var contents = document.getElementsByClassName("content-div");
+    var contents = document.getElementsByClassName("captcha-content-div");
     for (const i in contents)
         contents[i].hidden = true;
     document.getElementById(captcha_type).hidden = false;
@@ -224,7 +224,7 @@ function detailTemplatedUrlRequestType(){
     var mainSelect = document.getElementById("id_templated_url_type");
     const request_type = mainSelect.options[mainSelect.selectedIndex].value;
     
-    var contents = document.getElementsByClassName("content-div");
+    var contents = document.getElementsByClassName("templated-url-content-div");
     for (const i in contents)
         contents[i].hidden = true;
     document.getElementById(request_type).hidden = false;
@@ -248,7 +248,7 @@ function detailAntiblock(){
     var mainSelect = document.getElementById("id_antiblock");
     const antiblock_type = mainSelect.options[mainSelect.selectedIndex].value;
     
-    var contents = document.getElementsByClassName("content-div");
+    var contents = document.getElementsByClassName("antiblock-content-div");
     for (const i in contents)
         contents[i].hidden = true;
     document.getElementById(antiblock_type).hidden = false;
@@ -260,7 +260,7 @@ function detailCrawlerType(){
     var mainSelect = document.getElementById("id_crawler_type");
     const crawler_type = mainSelect.options[mainSelect.selectedIndex].value;
     
-    var contents = document.getElementsByClassName("content-div");
+    var contents = document.getElementsByClassName("crawler-type-content-div");
     for (const i in contents)
         contents[i].hidden = true;
     document.getElementById(crawler_type).hidden = false;

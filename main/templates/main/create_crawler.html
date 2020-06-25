@@ -130,8 +130,8 @@ New Crawler
                             <div class="col md-6">
                                 {{ form.antiblock | as_crispy_field}}
                                 <div id="antiblockDiv">
-                                    <div class="content-div" id="none" hidden></div>
-                                    <div class="content-div" id="ip" hidden>
+                                    <div class="antiblock-content-div" id="none" hidden></div>
+                                    <div class="antiblock-content-div" id="ip" hidden>
                                         {{ form.ip_type | as_crispy_field}}
                                         <div id="tor_div">
                                         </div>
@@ -141,15 +141,15 @@ New Crawler
                                         {{ form.max_reqs_per_ip | as_crispy_field}}
                                         {{ form.max_reuse_rounds | as_crispy_field}}
                                     </div>
-                                    <div class="content-div" id="user_agent" hidden>
+                                    <div class="antiblock-content-div" id="user_agent" hidden>
                                         {{ form.reqs_per_user_agent | as_crispy_field}}
                                         {{ form.user_agents_file | as_crispy_field}}
                                     </div>
-                                    <div class="content-div" id="delay" hidden>
+                                    <div class="antiblock-content-div" id="delay" hidden>
                                         {{ form.delay_secs | as_crispy_field}}
                                         {{ form.delay_type | as_crispy_field}}
                                     </div>
-                                    <div class="content-div" id="cookies" hidden>
+                                    <div class="antiblock-content-div" id="cookies" hidden>
                                         {{ form.cookies_file | as_crispy_field}}
                                         {{ form.persist_cookies | as_crispy_field}}
                                     </div>
@@ -163,10 +163,10 @@ New Crawler
                             <div class="col md-6">
                                 {{ form.captcha | as_crispy_field}}
                                 <div id="captchaDiv">
-                                    <div class="content-div" id="image" hidden>
+                                    <div class="captcha-content-div" id="image" hidden>
                                         {{ form.img_xpath | as_crispy_field}}
                                     </div>
-                                    <div class="content-div" id="sound" hidden>
+                                    <div class="captcha-content-div" id="sound" hidden>
                                         {{ form.sound_xpath | as_crispy_field}}
                                     </div>
                                     <div class="webdriver-div" id="webdriver" hidden>
@@ -184,15 +184,15 @@ New Crawler
                         <div class="row" style="padding:20px;">
                             <div class="col md-6">
                                 {{ form.crawler_type | as_crispy_field}}
-                                <div class="content-div" id="static_page">
+                                <div class="crawler-type-content-div" id="static_page">
                                     {{ form.explore_links | as_crispy_field}}
                                     {{ form.link_extractor_max_depht | as_crispy_field}}
                                     {{ form.link_extractor_allow | as_crispy_field}}
                                     {{ form.link_extractor_allow_extensions | as_crispy_field}}
                                 </div>
-                                <div class="content-div" id="form_page" hidden></div>
-                                <div class="content-div" id="single_file" hidden></div>
-                                <div class="content-div" id="bundle_file" hidden></div>
+                                <div class="crawler-type-content-div" id="form_page" hidden></div>
+                                <div class="crawler-type-content-div" id="single_file" hidden></div>
+                                <div class="crawler-type-content-div" id="bundle_file" hidden></div>
                             </div>
                         </div>
                     </div>
@@ -201,11 +201,11 @@ New Crawler
                         <div class="row" style="padding:20px;">
                             <div class="col md-6">
                                 {{ form.templated_url_type | as_crispy_field}}
-                                <div class="content-div" id="none" hidden></div>
-                                <div class="content-div" id="get" hidden>
+                                <div class="templated-url-content-div" id="none" hidden></div>
+                                <div class="templated-url-content-div" id="get" hidden>
                                     {{ form.formatable_url | as_crispy_field}}
                                 </div>
-                                <div class="content-div" id="post" hidden>
+                                <div class="templated-url-content-div" id="post" hidden>
                                     {{ form.post_dictionary | as_crispy_field}}
                                 </div>
                             </div>
