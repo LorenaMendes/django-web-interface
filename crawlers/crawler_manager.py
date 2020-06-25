@@ -34,7 +34,7 @@ def crawler_process(crawler_id, config):
     """Starts crawling."""
     # Redirects process logs to files
     sys.stdout = open(f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}.out", "a", buffering=1)
-    sys.stderr = open(f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}_error.out", "a", buffering=1)
+    sys.stderr = open(f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}.err", "a", buffering=1)
 
     process = CrawlerProcess(settings=get_crawler_base_settings())
 
@@ -105,7 +105,7 @@ def remove_crawler(crawler_id, are_you_sure=False):
         f"{CURR_FOLDER_FROM_ROOT}/config/{crawler_id}.json",
         f"{CURR_FOLDER_FROM_ROOT}/flags/{crawler_id}.json",
         f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}.out",
-        f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}_error.out",
+        f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}.err",
 
     ]
     for f in files:
