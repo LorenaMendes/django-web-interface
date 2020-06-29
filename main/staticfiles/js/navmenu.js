@@ -1,22 +1,3 @@
-// Get the modal
-var modal = document.getElementById('id01');
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-    modal.style.display = "none";
-    }
-}
-
-$(document).on('click', '.confirm-delete', function () {
-    $("#confirmDeleteModal").attr("caller-id", $(this).attr("id"));
-});
-
-$(document).on('click', '#confirmDeleteButtonModal', function () {
-    var caller = $("#confirmDeleteButtonModal").closest(".modal").attr("caller-id");
-    window.location = $("#".concat(caller)).attr("href");
-});
-
 function defineIcon(section, isValid){
     var sectionId = '#' + section + '-valid-icon';
     if (isValid) {

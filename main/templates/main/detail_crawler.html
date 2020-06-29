@@ -100,7 +100,7 @@ Crawler "{{ crawler.source_name }}"
             <a class="btn btn-danger" id="stop_button">
                 <img src="{% static 'gif/loading-png-gif.gif' %}" style="height: 25px">
             </a> -->
-            <button type="button" class="btn btn-primary">Edit</button>
+            <a class="btn btn-info" href="{% url 'edit_crawler' crawler.id %}" class="btn btn-primary">Edit</a>
             <a class="btn btn-secondary" href="{% url 'delete_crawler' crawler.id %}">Delete</a>
         </div>
     </div>

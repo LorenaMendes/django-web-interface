@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 
 from .forms import CrawlRequestForm, RawCrawlRequestForm
@@ -17,7 +17,6 @@ def list_crawlers(response):
     context = {'allcrawlers': getAllData()}
     return render(response, "main/list_crawlers.html", context)
 
-
 def create_crawler(response):
     context = {}
     if response.method == "POST":
@@ -32,6 +31,18 @@ def create_crawler(response):
     context['form'] = my_form
     return render(response, "main/create_crawler.html", context)
 
+def edit_crawler(request, id):
+    crawler = get_object_or_404(CrawlRequest, pk=id)
+    form = CrawlRequestForm(request.POST or None, instance=crawler)
+
+    if(request.method == 'POST'):
+        if(form.is_valid()):
+            form.save()
+            return HttpResponseRedirect('http://localhost:8000/crawlers/')
+    else:
+        print("ESTOY AQUI")
+        return render(request, 'main/create_crawler.html', {'form': form, 'crawler' : crawler})
+        
 def delete_crawler(request, id):
     crawler = CrawlRequest.objects.get(id=id)
     
