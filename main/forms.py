@@ -7,23 +7,20 @@ class CrawlRequestForm(forms.ModelForm):
         
         obey_robots = forms.BooleanField(required=False)
 
-        # Options for IP rotation
-        ip_type = forms.ChoiceField(required=False)
-        proxy_list = forms.CharField(required=False)
-        max_reqs_per_ip = forms.IntegerField(required=False)
-        max_reuse_rounds = forms.IntegerField(required=False)
-        
-        # Options for User Agent rotation
-        reqs_per_user_agent = forms.IntegerField(required=False)
-        user_agents_file = forms.CharField(required=False)
-        
-        # Options for Delay
-        delay_secs = forms.IntegerField(required=False)
-        delay_type = forms.ChoiceField(required=False)
-        
-        # Options for Cookies
-        cookies_file = forms.CharField(required=False)
-        persist_cookies = forms.BooleanField(required=False)
+        # Options for antiblock
+        antiblock_download_delay = forms.IntegerField(required=False)
+        antiblock_autothrottle_enabled = forms.BooleanField(required=False)
+        antiblock_autothrottle_start_delay = forms.IntegerField(required=False)
+        antiblock_autothrottle_max_delay = forms.IntegerField(required=False)
+        antiblock_mask_type = forms.ChoiceField(required=False)
+        antiblock_ip_rotation_type = forms.ChoiceField(required=False)
+        antiblock_proxy_list = forms.CharField(required=False)
+        antiblock_max_reqs_per_ip = forms.IntegerField(required=False)
+        antiblock_max_reuse_rounds = forms.IntegerField(required=False)
+        antiblock_reqs_per_user_agent = forms.IntegerField(required=False)
+        antiblock_user_agents_file = forms.CharField(required=False)
+        antiblock_cookies_file = forms.CharField(required=False)
+        antiblock_persist_cookies = forms.BooleanField(required=False)
 
         # Options for Captcha
         has_webdriver = forms.BooleanField(required=False)
@@ -52,18 +49,22 @@ class CrawlRequestForm(forms.ModelForm):
             'source_name',
             'base_url',
             'obey_robots',
-            'antiblock',
             'captcha',
-            'ip_type',
-            'max_reqs_per_ip',
-            'max_reuse_rounds',
-            'proxy_list',
-            'reqs_per_user_agent',
-            'user_agents_file',
-            'delay_secs',
-            'delay_type',
-            'cookies_file',
-            'persist_cookies',
+            
+            'antiblock_download_delay',
+            'antiblock_autothrottle_enabled',
+            'antiblock_autothrottle_start_delay',
+            'antiblock_autothrottle_max_delay',
+            'antiblock_mask_type',
+            'antiblock_ip_rotation_type',
+            'antiblock_max_reqs_per_ip',
+            'antiblock_max_reuse_rounds',
+            'antiblock_proxy_list',
+            'antiblock_reqs_per_user_agent',
+            'antiblock_user_agents_file',
+            'antiblock_cookies_file',
+            'antiblock_persist_cookies',
+
             'has_webdriver',
             'webdriver_path',
             'img_xpath',
@@ -92,8 +93,36 @@ class RawCrawlRequestForm(forms.Form):
     )
     obey_robots = forms.BooleanField(required=False, label="Obey robots.txt")
     
-    # ANTIBLOCK ##########################################################################
-    antiblock = forms.ChoiceField(
+    # ANTIBLOCK ##########################################################################    
+    # Options for Delay
+    antiblock_download_delay = forms.IntegerField(
+        required=False,
+        label="Average delay in Seconds (or min delay if autothrottle is on).",
+        initial=2,
+    )
+    antiblock_autothrottle_enabled = forms.BooleanField(
+        required=False,
+        label="Enable autothrottle",
+        
+        widget=forms.CheckboxInput(
+            attrs={
+                "onclick": "autothrottleEnabled();",
+            }
+        )
+    )
+    antiblock_autothrottle_start_delay = forms.IntegerField(
+        required=False,
+        label="Starting delay",
+        initial=2,
+    )
+    antiblock_autothrottle_max_delay = forms.IntegerField(
+        required=False,
+        label="Max delay",
+        initial=10,
+    )
+
+    # Options for mask type
+    antiblock_mask_type = forms.ChoiceField(
         choices = (
             ('none', 'None'),
             ('ip', 'IP rotation'),
@@ -105,44 +134,42 @@ class RawCrawlRequestForm(forms.Form):
     )
     
     # Options for IP rotation
-    ip_type = forms.ChoiceField(
+    antiblock_ip_rotation_type = forms.ChoiceField(
         required=False, choices = (
             ('tor', 'Tor'), 
             ('proxy', 'Proxy'),
         ),
         widget=forms.Select(attrs={'onchange': 'detailIpRotationType();'})
     )
-    proxy_list = forms.CharField(
+    antiblock_proxy_list = forms.CharField(
         required=False, max_length=2000, label="Proxy List",
         widget=forms.TextInput(attrs={'placeholder': 'Paste here the content of your proxy list file'})
     )
-    max_reqs_per_ip = forms.IntegerField(required=False, label="Max Requisitions per IP")
-    max_reuse_rounds = forms.IntegerField(required=False, label="Max Reuse Rounds")
+    antiblock_max_reqs_per_ip = forms.IntegerField(
+        required=False,
+        label="Max Requisitions per IP",    
+        initial=10,
+    )
+    antiblock_max_reuse_rounds = forms.IntegerField(
+        required=False,
+        label="Max Reuse Rounds",
+        initial=10,
+    )
     
     # Options for User Agent rotation
-    reqs_per_user_agent = forms.IntegerField(required=False, label="Requests per User Agent")
-    user_agents_file = forms.CharField(
+    antiblock_reqs_per_user_agent = forms.IntegerField(required=False, label="Requests per User Agent")
+    antiblock_user_agents_file = forms.CharField(
         required=False, max_length=2000, label="User Agents File",
         widget=forms.TextInput(attrs={'placeholder': 'Paste here the content of your user agents file'})
     )
-    delay_secs = forms.IntegerField(required=False, label="Delay in Seconds")
-
-    # Options for Delay
-    delay_secs = forms.IntegerField(required=False, label="Delay in Seconds")
-    delay_type = forms.ChoiceField(
-        required=False, choices = (
-            ('random', 'Random'), 
-            ('fixed', 'Fixed'),
-        )
-    )
 
     # Options for Cookies
-    cookies_file = forms.CharField(
+    antiblock_cookies_file = forms.CharField(
         required=False, max_length=2000, label="Cookies File",
         widget=forms.TextInput(attrs={'placeholder': 'Paste here the content of your cookies file'})
     )
-    persist_cookies = forms.BooleanField(required=False, label="Persist Cookies")
-    
+    antiblock_persist_cookies = forms.BooleanField(required=False, label="Persist Cookies")
+
     # CAPTCHA ############################################################################
     captcha = forms.ChoiceField(
         choices = (

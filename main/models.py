@@ -26,42 +26,38 @@ class CrawlRequest(TimeStamped):
     
 
     # ANTIBLOCK #####################################################################
-    ANTIBLOCK_TYPE = [
+    # Options for Delay
+    antiblock_download_delay = models.IntegerField(blank=True, null=True)
+    antiblock_autothrottle_enabled = models.BooleanField(blank=True, null=True)
+    antiblock_autothrottle_start_delay = models.IntegerField(blank=True, null=True)
+    antiblock_autothrottle_max_delay = models.IntegerField(blank=True, null=True)
+
+    # Options for antiblock masks
+    ANTIBLOCK_MASK_TYPE = [
         ('none', 'None'),
         ('ip', 'IP rotation'),
         ('user_agent', 'User-agent rotation'),
-        ('delay', 'Delays'),
         ('cookies', 'Use cookies'),
     ]
-    antiblock = models.CharField(max_length=15, choices=ANTIBLOCK_TYPE, default='none')
+    antiblock_mask_type = models.CharField(max_length=15, choices=ANTIBLOCK_MASK_TYPE, default='none')
     
-    # Options for antiblock
         # Options for IP rotation
     IP_TYPE = [
         ('tor', 'Tor'),
         ('proxy', 'Proxy'),
     ]
-    ip_type = models.CharField(max_length=15, choices=IP_TYPE, null=True, blank=True)
-    proxy_list = models.CharField(max_length=2000, blank=True, null=True) # available for Proxy List
-    max_reqs_per_ip = models.IntegerField(blank=True, null=True)
-    max_reuse_rounds = models.IntegerField(blank=True, null=True)
+    antiblock_ip_rotation_type = models.CharField(max_length=15, choices=IP_TYPE, null=True, blank=True)
+    antiblock_proxy_list = models.CharField(max_length=2000, blank=True, null=True) # available for Proxy List
+    antiblock_max_reqs_per_ip = models.IntegerField(blank=True, null=True)
+    antiblock_max_reuse_rounds = models.IntegerField(blank=True, null=True)
 
         # Options for User Agent rotation 
-    reqs_per_user_agent = models.IntegerField(blank=True, null=True)
-    user_agents_file = models.CharField(max_length=2000, blank=True, null=True)
-    
-        # Options for Delay
-    delay_secs = models.IntegerField(blank=True, null=True)
+    antiblock_reqs_per_user_agent = models.IntegerField(blank=True, null=True)
+    antiblock_user_agents_file = models.CharField(max_length=2000, blank=True, null=True)
 
-    DELAY_TYPE = [
-        ('random', 'Random'), 
-        ('fixed', 'Fixed'),
-    ]
-    delay_type = models.CharField(max_length=15, choices=DELAY_TYPE, blank=True, null=True)
-        
         # Options for Cookies
-    cookies_file = models.CharField(max_length=2000, blank=True, null=True)
-    persist_cookies = models.BooleanField(blank=True, null=True)
+    antiblock_cookies_file = models.CharField(max_length=2000, blank=True, null=True)
+    antiblock_persist_cookies = models.BooleanField(blank=True, null=True)
 
     # CAPTCHA #######################################################################
     CAPTCHA_TYPE = [

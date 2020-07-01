@@ -17,7 +17,18 @@ from crawlers.constants import *
 from crawlers.static_page import StaticPageSpider
 import requests
 
-def get_crawler_base_settings():
+# TODO: implement following antiblock options
+# antiblock_mask_type
+# antiblock_ip_rotation_type
+# antiblock_proxy_list
+# antiblock_max_reqs_per_ip
+# antiblock_max_reuse_rounds
+# antiblock_reqs_per_user_agent
+# antiblock_user_agents_file
+# antiblock_cookies_file
+# antiblock_persist_cookies
+
+def get_crawler_base_settings(config):
     """Returns scrapy base configurations."""
     return {
         "BOT_NAME": "crawlers",
@@ -25,10 +36,13 @@ def get_crawler_base_settings():
         "DOWNLOAD_DELAY": 1,
         "SELENIUM_DRIVER_NAME": "chrome",
         "SELENIUM_DRIVER_EXECUTABLE_PATH": shutil.which("{CURR_FOLDER_FROM_ROOT}/webdriver/chromedriver_win32_chr_81.exe"),
-        # SELENIUM_DRIVER_ARGUMENTS: [],
         "SELENIUM_DRIVER_ARGUMENTS": ["--headless"],
         "DOWNLOADER_MIDDLEWARES": {"scrapy_selenium.SeleniumMiddleware": 0},
-        "DOWNLOAD_DELAY": 1,
+        "DOWNLOAD_DELAY": config["antiblock_download_delay"],
+        "RANDOMIZE_DOWNLOAD_DELAY": True,
+        "AUTOTHROTTLE_ENABLED": config["antiblock_autothrottle_enabled"],
+        "AUTOTHROTTLE_START_DELAY": config["antiblock_autothrottle_start_delay"],
+        "AUTOTHROTTLE_MAX_DELAY": config["antiblock_autothrottle_max_delay"],
     }
 
 def crawler_process(crawler_id, config):
@@ -37,7 +51,7 @@ def crawler_process(crawler_id, config):
     sys.stdout = open(f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}.out", "a", buffering=1)
     sys.stderr = open(f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}.err", "a", buffering=1)
 
-    process = CrawlerProcess(settings=get_crawler_base_settings())
+    process = CrawlerProcess(settings=get_crawler_base_settings(config))
 
     if config["crawler_type"] == "single_file":
         # process.crawl(StaticPageSpider, crawler_id=crawler_id)
@@ -68,6 +82,8 @@ def gen_key():
     return str(int(time.time()*100)) + str((int(random.random() * 1000)))
 
 def start_crawler(config):
+    print(config)
+    return gen_key()
     """Create and starts a crawler as a new process."""
     crawler_id = gen_key()
     print(os.getcwd())

@@ -1,5 +1,9 @@
 {% extends 'main/base.html' %}
+
+{% load static %}
+
 {% load crispy_forms_tags %}
+
 {% block title %}
 New Crawler
 {% endblock %}
@@ -126,34 +130,47 @@ New Crawler
                     </div>
                     
                     <div id="antiblock-item-block" class="block" hidden>
-                        <div class="row" style="padding:20px;">
+                        <div class="row" style="padding:20px; border-top: 1px solid #DCDCDC;">
                             <div class="col md-6">
-                                {{ form.antiblock | as_crispy_field}}
-                                <div id="antiblockDiv">
-                                    <div class="antiblock-content-div" id="none" hidden></div>
-                                    <div class="antiblock-content-div" id="ip" hidden>
-                                        {{ form.ip_type | as_crispy_field}}
+                                <div id="antiblock-delay-div">
+                                    {{ form.antiblock_download_delay | as_crispy_field}}
+                                    <p>If autothrottle if off, this works as mean delay between calls. The actual
+                                        delay will be a value between 0.5*delay and 1.5*delay.</p>
+                                    {{ form.antiblock_autothrottle_enabled | as_crispy_field}}
+                                    <p>This options adjusts the delay between calls to match the domain response
+                                    time.</p>
+                                    <div id="autothrottle-options-div" hidden=True>
+                                        <div>{{form.antiblock_autothrottle_start_delay | as_crispy_field}}</div>
+                                        <div>{{form.antiblock_autothrottle_max_delay | as_crispy_field}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding:20px; border-top: 1px solid #DCDCDC;">
+                            <div class="col md-6">
+                                {{ form.antiblock_mask_type | as_crispy_field}}
+                                <div id="antiblock-mask-div">
+                                    <div class="antiblock-mask-div" id="none" hidden></div>
+                                    <div class="antiblock-mask-div" id="ip" hidden>
+                                        {{ form.antiblock_ip_rotation_type | as_crispy_field}}
                                         <div id="tor_div">
                                         </div>
                                         <div id="proxy_div" hidden>
-                                            {{ form.proxy_list | as_crispy_field}}
+                                            {{ form.antiblock_proxy_list | as_crispy_field}}
                                         </div>
-                                        {{ form.max_reqs_per_ip | as_crispy_field}}
-                                        {{ form.max_reuse_rounds | as_crispy_field}}
+                                        {{ form.antiblock_max_reqs_per_ip | as_crispy_field}}
+                                        {{ form.antiblock_max_reuse_rounds | as_crispy_field}}
                                     </div>
-                                    <div class="antiblock-content-div" id="user_agent" hidden>
-                                        {{ form.reqs_per_user_agent | as_crispy_field}}
-                                        {{ form.user_agents_file | as_crispy_field}}
+                                    <div class="antiblock-mask-div" id="user_agent" hidden>
+                                        {{ form.antiblock_reqs_per_user_agent | as_crispy_field}}
+                                        {{ form.antiblock_user_agents_file | as_crispy_field}}
                                     </div>
-                                    <div class="antiblock-content-div" id="delay" hidden>
-                                        {{ form.delay_secs | as_crispy_field}}
-                                        {{ form.delay_type | as_crispy_field}}
-                                    </div>
-                                    <div class="antiblock-content-div" id="cookies" hidden>
-                                        {{ form.cookies_file | as_crispy_field}}
-                                        {{ form.persist_cookies | as_crispy_field}}
+                                    <div class="antiblock-mask-div" id="cookies" hidden>
+                                        {{ form.antiblock_cookies_file | as_crispy_field}}
+                                        {{ form.antiblock_persist_cookies | as_crispy_field}}
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -241,4 +258,8 @@ New Crawler
     </div>
 </div>
 
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/create_crawler.js' %}"></script>
 {% endblock %}
