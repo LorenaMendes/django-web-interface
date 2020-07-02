@@ -67,8 +67,8 @@ function setHiddenState(element_id, hidden) {
 }
 
 function checkBasicInfo() {
-    var valid = valid && validateTextInput('id_source_name') && validateTextInput('id_base_url');
-    defineIcon(section, valid);
+    var valid = validateTextInput('id_source_name') && validateTextInput('id_base_url');
+    defineIcon("basic-info", valid);
 }
 
 function checkAntiblock() {
