@@ -28,6 +28,21 @@ import requests
 # antiblock_cookies_file
 # antiblock_persist_cookies
 
+def create_folders():
+    """Create essential folders for crawlers if they do not exists"""
+    files = [
+        f"{CURR_FOLDER_FROM_ROOT}/config",
+        f"{CURR_FOLDER_FROM_ROOT}/data",
+        f"{CURR_FOLDER_FROM_ROOT}/flags",
+        f"{CURR_FOLDER_FROM_ROOT}/log",
+        f"{CURR_FOLDER_FROM_ROOT}/webdriver",
+    ]
+    for f in files:
+        try:
+            os.mkdir(f)
+        except FileExistsError:
+            pass
+
 def get_crawler_base_settings(config):
     """Returns scrapy base configurations."""
     return {
@@ -83,6 +98,8 @@ def gen_key():
 
 def start_crawler(config):
     """Create and starts a crawler as a new process."""
+    create_folders()
+
     crawler_id = gen_key()
     print(os.getcwd())
     
@@ -121,7 +138,6 @@ def remove_crawler(crawler_id, are_you_sure=False):
         f"{CURR_FOLDER_FROM_ROOT}/flags/{crawler_id}.json",
         f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}.out",
         f"{CURR_FOLDER_FROM_ROOT}/log/{crawler_id}.err",
-
     ]
     for f in files:
         try:
