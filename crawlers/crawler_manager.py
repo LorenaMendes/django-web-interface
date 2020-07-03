@@ -82,8 +82,6 @@ def gen_key():
     return str(int(time.time()*100)) + str((int(random.random() * 1000)))
 
 def start_crawler(config):
-    print(config)
-    return gen_key()
     """Create and starts a crawler as a new process."""
     crawler_id = gen_key()
     print(os.getcwd())
