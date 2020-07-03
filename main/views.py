@@ -40,7 +40,6 @@ def edit_crawler(request, id):
             form.save()
             return HttpResponseRedirect('http://localhost:8000/crawlers/')
     else:
-        print("ESTOY AQUI")
         return render(request, 'main/create_crawler.html', {'form': form, 'crawler' : crawler})
         
 def delete_crawler(request, id):
