@@ -39,7 +39,7 @@ class CrawlRequest(TimeStamped):
         ('user_agent', 'User-agent rotation'),
         ('cookies', 'Use cookies'),
     ]
-    antiblock_mask_type = models.CharField(max_length=15, choices=ANTIBLOCK_MASK_TYPE, default='none')
+    antiblock_mask_type = models.CharField(max_length=15, choices=ANTIBLOCK_MASK_TYPE, blank=True, null=True, default='none')
     
         # Options for IP rotation
     IP_TYPE = [

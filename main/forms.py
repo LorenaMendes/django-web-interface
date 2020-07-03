@@ -123,12 +123,12 @@ class RawCrawlRequestForm(forms.Form):
 
     # Options for mask type
     antiblock_mask_type = forms.ChoiceField(
-        choices = (
+        required=False, choices = (
             ('none', 'None'),
-            ('ip', 'IP rotation'),
-            ('user_agent', 'User-agent rotation'),
-            ('delay', 'Delays'),
-            ('cookies', 'Use cookies'),
+            # ('ip', 'IP rotation'),
+            # ('user_agent', 'User-agent rotation'),
+            # ('delay', 'Delays'),
+            # ('cookies', 'Use cookies'),
         ),
         widget=forms.Select(attrs={'onchange': 'detailAntiblock();'})
     )
@@ -200,9 +200,9 @@ class RawCrawlRequestForm(forms.Form):
     crawler_type = forms.ChoiceField(
         required=False, choices = (
             ('static_page', 'Static Page'), 
-            ('form_page', 'Page with Form'),
-            ('single_file', 'Single File'),
-            ('bundle_file', 'Bundle File'),
+            # ('form_page', 'Page with Form'),
+            # ('single_file', 'Single File'),
+            # ('bundle_file', 'Bundle File'),
         ),
         widget=forms.Select(attrs={'onchange': 'detailCrawlerType();'})
     )
